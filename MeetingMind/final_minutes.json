@@ -1,0 +1,202 @@
+{
+  "date": "March 8, 2025",
+  "time": "10:00 AM",
+  "attendees": [
+    "Rohan",
+    "Adi",
+    "Kriti",
+    "Oishi",
+    "Diya",
+    "Harsh"
+  ],
+  "absences": [
+    "Connie",
+    "Leah",
+    "Edward"
+  ],
+  "agenda": {
+    "1": {
+      "title": "Matters Arising from Last Meeting",
+      "details": "Vice President Adi reported that there are no major issues, just follow-ups on matters discussed in the previous meeting."
+    },
+    "2": {
+      "title": "President's Update",
+      "subsections": {
+        "2.1": {
+          "title": "Library Budget",
+          "details": "Rohan mentioned the Department of Welfare is facing budget cuts. CUES has offered to buy some board games for the library."
+        },
+        "2.2": {
+          "title": "Elections",
+          "details": ""
+        },
+        "2.3": {
+          "title": "Call with EWOR",
+          "details": ""
+        }
+      }
+    },
+    "3": {
+      "title": "Vice President's Update",
+      "subsections": {
+        "3.1": {
+          "title": "Committee Work",
+          "details": ""
+        },
+        "3.2": {
+          "title": "Grants",
+          "details": ""
+        },
+        "3.3": {
+          "title": "Resource Changes",
+          "details": ""
+        }
+      }
+    },
+    "4": {
+      "title": "Treasurer's Update",
+      "subsections": {
+        "4.1": {
+          "title": "Budget",
+          "details": ""
+        },
+        "4.2": {
+          "title": "Eng Cafe Funding",
+          "details": ""
+        },
+        "4.3": {
+          "title": "Negotiations for Cheaper Tea",
+          "details": ""
+        },
+        "4.4": {
+          "title": "Leavers' Yearbook",
+          "details": ""
+        },
+        "4.5": {
+          "title": "Catering Costs",
+          "subsections": {
+            "4.5.1": {
+              "title": "3L Coffee, 40 Half Cakes",
+              "details": ""
+            },
+            "4.5.2": {
+              "title": "5L Coffee/Tea",
+              "details": ""
+            },
+            "4.5.3": {
+              "title": "Limiting by Year Group or Time Slot",
+              "details": ""
+            }
+          }
+        }
+      }
+    },
+    "5": {
+      "title": "Sponsorship Update",
+      "subsections": {
+        "5.1": {
+          "title": "Careers Fair 2025 Venue Issues",
+          "details": ""
+        },
+        "5.2": {
+          "title": "Offer to Pay Careers Service for Venue",
+          "details": ""
+        },
+        "5.3": {
+          "title": "Potential Negotiation Tactic",
+          "details": ""
+        }
+      }
+    },
+    "6": {
+      "title": "Opportunities Update",
+      "subsections": {
+        "6.1": {
+          "title": "Diversity and Access",
+          "details": ""
+        },
+        "6.2": {
+          "title": "Welfare Events",
+          "subsections": {
+            "6.2.1": {
+              "title": "Gelato Bike Options",
+              "details": ""
+            },
+            "6.2.2": {
+              "title": "Alternative Location",
+              "details": ""
+            },
+            "6.2.3": {
+              "title": "Hot Numbers Cafe Issues",
+              "details": ""
+            }
+          }
+        }
+      }
+    },
+    "7": {
+      "title": "Events Update",
+      "subsections": {
+        "7.1": {
+          "title": "Seating Plan",
+          "details": ""
+        },
+        "7.2": {
+          "title": "Goodie Bags",
+          "details": ""
+        },
+        "7.3": {
+          "title": "Gluten-Free Ticket",
+          "details": ""
+        },
+        "7.4": {
+          "title": "Ballroom Dancing",
+          "details": ""
+        },
+        "7.5": {
+          "title": "Photobooth",
+          "details": ""
+        },
+        "7.6": {
+          "title": "Arrival Drinks",
+          "details": ""
+        },
+        "7.7": {
+          "title": "Sponsor Coordination",
+          "details": ""
+        }
+      }
+    },
+    "8": {
+      "title": "Media & Communications Update",
+      "subsections": {
+        "8.1": {
+          "title": "Annual Dinner Promotion",
+          "details": ""
+        },
+        "8.2": {
+          "title": "Yearbook Company",
+          "details": ""
+        }
+      }
+    },
+    "9": {
+      "title": "Technology Update",
+      "subsections": {
+        "9.1": {
+          "title": "Website Updates",
+          "details": ""
+        },
+        "9.2": {
+          "title": "Magazine Addition to Website",
+          "details": ""
+        }
+      }
+    },
+    "10": {
+      "title": "Other Business",
+      "details": ""
+    }
+  },
+  "nextMeeting": ""
+}
