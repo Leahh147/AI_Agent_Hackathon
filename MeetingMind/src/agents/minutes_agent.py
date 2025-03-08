@@ -3,6 +3,10 @@ from dotenv import load_dotenv
 import os
 import json
 import re
+import asyncio
+from copy import deepcopy
+import queue
+from typing import List, Dict, Any
 
 # Load the .env file
 load_dotenv()
@@ -10,104 +14,186 @@ load_dotenv()
 # Get the OpenAI API key from the environment variables
 openai.api_key = os.getenv("API_KEY")
 
-# Function to generate a response from the OpenAI API
-def generate_agenda_update(transcript_message, last_agenda):
-    # Preparing the messages for the OpenAI model
-    messages = [
-        {"role": "system", "content": "You are an assistant helping to organize a meeting and update the agenda based on the latest transcript."},
-        {"role": "user", "content": f"""
-        The meeting agenda is as follows:
-        {json.dumps(last_agenda, indent=2)}
-
-        The latest transcript message is:
-        {transcript_message}
-
-        Your task is to:
-        1. Identify the section or subsection in the agenda that corresponds to the transcript.
-        2. Update that section or subsection with the details from the transcript.
-        3. Return a JSON object in this format:
-        {{
-            "updated_index": "section_number",
-            "updated_section": {{
-                "title": "Section Title",
-                "details": "Updated details"
-            }}
-        }}
-        """}
-    ]
-
-    # Requesting OpenAI's response using the new API method
-    response = openai.chat.completions.create(
-        model="gpt-4",  # You can use gpt-4 or gpt-3.5-turbo
-        messages=messages,
-        temperature=0.7,
-        max_tokens=300
-    )
-
-
-    # Parsing the response
-    try:
-        content = response.choices[0].message.content.strip()
-
-
-        # Use a regular expression to match all JSON-like portions in the response
-        # Match anything between curly braces {}
-        json_objects = re.findall(r'\{[^{}]*\}', content)
-
-        # Now parse each matched JSON object
-        updates = []
-        for json_str in json_objects:
+class MinutesAgent:
+    def __init__(self, name="MinutesAgent"):
+        self.name = name
+        self.minutes = []
+        self.processing_lock = asyncio.Lock()  # Lock for synchronizing updates
+        self.transcript_queue = asyncio.Queue()  # Queue for transcript lines
+        self.processing_task = None  # Task for processing the queue
+        
+        # Get the project root directory
+        self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        
+        # Set paths for files
+        self.sample_minute_path = os.path.join(
+            self.project_root, "tests", "sample_data", "sample_minute_structure.json"
+        )
+        self.output_path = os.path.join(
+            self.project_root, "final_minutes.json"
+        )
+        
+        # Load the initial minutes structure
+        self.load_minutes_structure()
+        
+        # Start the background processing task
+        self.start_processing()
+    
+    def load_minutes_structure(self):
+        """Load the initial minutes structure from the sample file."""
+        try:
+            with open(self.sample_minute_path, 'r') as f:
+                self.minutes_structure = json.load(f)
+            
+            # Save the initial structure to the output file
+            self.save_minutes()
+            print(f"Loaded minutes structure from {self.sample_minute_path}")
+        except Exception as e:
+            print(f"Error loading minutes structure: {e}")
+            self.minutes_structure = {}
+    
+    def start_processing(self):
+        """Start the background task to process queued transcript lines."""
+        self.processing_task = asyncio.create_task(self.process_queue())
+    
+    async def process_queue(self):
+        """Process transcript lines from the queue one at a time."""
+        while True:
             try:
-                updates.append(json.loads(json_str))
-            except json.JSONDecodeError:
-                continue  # Ignore any non-JSON parts
-
-        # If we successfully parsed any updates, return them
-        if updates:
-            return updates
+                # Get the next transcript line from the queue
+                transcript_line = await self.transcript_queue.get()
+                
+                # Process the transcript line
+                await self._process_transcript_line(transcript_line)
+                
+                # Mark the task as done
+                self.transcript_queue.task_done()
+                
+            except Exception as e:
+                print(f"Error processing transcript line: {e}")
+                continue
+    
+    async def update(self, transcript_line):
+        """Called when a new transcript line is added. Adds the line to the processing queue."""
+        print(f"{self.name} received: {transcript_line['speaker']} said: {transcript_line['message']}")
+        
+        # Add to basic history
+        if len(transcript_line['message']) > 50:
+            summary = f"Summary: {transcript_line['message'][:50]}..."
         else:
-            return {"error": "No valid updates found in response"}
+            summary = f"Short message: {transcript_line['message']}"
+            
+        self.minutes.append({
+            "timestamp": transcript_line['timestamp'],
+            "speaker": transcript_line['speaker'],
+            "summary": summary
+        })
+        
+        # Add to the processing queue instead of processing immediately
+        await self.transcript_queue.put(transcript_line)
+    
+    async def _process_transcript_line(self, transcript_line):
+        """Process a single transcript line - called from the queue processor."""
+        # Generate agenda update using OpenAI
+        transcript_message = f"{transcript_line['speaker']}: {transcript_line['message']}"
+        
+        # Use the lock to ensure only one update is processed at a time
+        async with self.processing_lock:
+            update = await self.generate_agenda_update_async(transcript_message, self.minutes_structure)
+            
+            # Process the update and modify the minutes structure if needed
+            if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
+                self.update_minutes_structure(update)
+                # Save the updated structure
+                self.save_minutes()
+    
+    async def generate_agenda_update_async(self, transcript_message, last_agenda):
+        """Async version of generate_agenda_update."""
+        messages = [
+            {"role": "system", "content": "You are an assistant helping to organize a meeting minutes based on the latest transcript."},
+            {"role": "user", "content": f"""
+            The meeting agenda structure is as follows:
+            {json.dumps(last_agenda, indent=2)}
 
-    except json.JSONDecodeError:
-        return {"error": "Error parsing JSON response from OpenAI"}
+            The latest transcript message is:
+            {transcript_message}
 
-# Example of the transcript and last meeting agenda
-transcript_message = """
-We have finalized the library budget proposal, and the elections will be held next month.
-"""
+            Your task is to:
+            1. Identify IF the section or subsection in the agenda corresponds to the transcript.
+            2. ONLY if the transcript contains relevant information, update that section/subsection.
+            3. The updated content to update are should be a summary of key details extracted from the transcript message.
+            3. Return ONLY a JSON object in this format:
+            {{
+                "section": "2", 
+                "subsection": "2.1", // only include if updating a subsection
+                "details": "Updated content" // include relevant details from transcript
+            }}
 
-last_agenda = {
-    "date": "March 8, 2025",
-    "time": "10:00 AM",
-    "attendees": ["Rohan", "Adi", "Kriti", "Oishi", "Diya", "Harsh"],
-    "absences": ["Connie", "Leah", "Edward"],
-    "agenda": {
-        "1": {
-            "title": "Matters Arising from Last Meeting",
-            "details": "Rohan (President) opened the meeting and asked if there were any matters arising from the last meeting."
-        },
-        "2": {
-            "title": "President's Update",
-            "subsections": {
-                "2.1": {
-                    "title": "Library Budget",
-                    "details": ""
-                },
-                "2.2": {
-                    "title": "Elections",
-                    "details": ""
-                },
-                "2.3": {
-                    "title": "Call with EWOR",
-                    "details": ""
-                }
-            }
-        }
-    }
-}
+            If the transcript doesn't contain any information relevant to the agenda, return:
+            {{
+                "section": null,
+                "details": null
+            }}
+            """}
+        ]
 
-# Call the function to update the agenda
-result = generate_agenda_update(transcript_message, last_agenda)
+        # Use asyncio to run the OpenAI call asynchronously
+        response = await asyncio.to_thread(
+            openai.chat.completions.create,
+            model="gpt-4",  # You can use gpt-4 or gpt-3.5-turbo
+            messages=messages,
+            temperature=0.7,
+            max_tokens=300
+        )
 
-# Print the result
-print(json.dumps(result, indent=2))
+        content = response.choices[0].message.content.strip()
+        
+        # Extract JSON from response
+        json_match = re.search(r'\{.*\}', content, re.DOTALL)
+        if json_match:
+            try:
+                update_json = json.loads(json_match.group())
+                return update_json
+            except json.JSONDecodeError:
+                print("Error decoding JSON from OpenAI response")
+                return {"section": None, "details": None}
+        else:
+            return {"section": None, "details": None}
+    
+    def update_minutes_structure(self, update):
+        """Update the minutes structure with the new information."""
+        section = update.get("section")
+        subsection = update.get("subsection", None)
+        details = update.get("details", "")
+        
+        if not section or section not in self.minutes_structure["agenda"]:
+            return
+            
+        if not subsection:
+            # Update main section
+            self.minutes_structure["agenda"][section]["details"] = details
+            print(f"Updated section {section} with: {details[:30]}...")
+        else:
+            # Handle nested subsections
+            section_data = self.minutes_structure["agenda"][section]
+            
+            # Check if the section has subsections
+            if "subsections" not in section_data:
+                return
+                
+            # Check if the exact subsection exists
+            if subsection in section_data["subsections"]:
+                section_data["subsections"][subsection]["details"] = details
+                print(f"Updated subsection {section}.{subsection} with: {details[:30]}...")
+    
+    def save_minutes(self):
+        """Save the current minutes structure to a file."""
+        try:
+            with open(self.output_path, 'w') as f:
+                json.dump(self.minutes_structure, f, indent=2)
+        except Exception as e:
+            print(f"Error saving minutes: {e}")
+    
+    def get_minutes(self):
+        """Return the generated minutes."""
+        return self.minutes

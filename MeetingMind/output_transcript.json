@@ -1,0 +1,33 @@
+{
+    "meeting": {
+        "date": "March 08, 2025",
+        "time": "10:00:00 AM",
+        "minutes": [
+            {
+                "timestamp": "10:00:05 AM",
+                "speaker": "Rohan (President)",
+                "message": "Alright, let's get started. We have quite a few things to go through today. First off, any matters arising from the last meeting?"
+            },
+            {
+                "timestamp": "10:00:15 AM",
+                "speaker": "Adi (Vice President)",
+                "message": "Nothing major, just following up on a few things we discussed last time."
+            },
+            {
+                "timestamp": "10:00:25 AM",
+                "speaker": "Rohan",
+                "message": "Good. Let's move to the main updates."
+            },
+            {
+                "timestamp": "10:00:28 AM",
+                "speaker": "Rohan",
+                "message": "First, the library budget 100 pounds allocated for student welfare initiatives. We were thinking of getting a Go board."
+            },
+            {
+                "timestamp": "10:00:48 AM",
+                "speaker": "Rohan",
+                "message": "Also, the Department of Welfare is facing budget cuts, so CUES has offered to buy some board games if the library wants them."
+            }
+        ]
+    }
+}

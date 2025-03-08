@@ -4,6 +4,7 @@ import json
 import time
 import datetime
 from typing import List, Dict, Callable, Any
+import asyncio
 
 class TranscriptProcessor:
     def __init__(self, transcript_file_path: str = None):
@@ -22,7 +23,7 @@ class TranscriptProcessor:
             self.observers.remove(observer)
 
 
-    def _notify_observers(self, line):
+    async def _notify_observers(self, line):
         """
         Notify all observers about a new transcript line.
         
@@ -35,7 +36,11 @@ class TranscriptProcessor:
         - 'message': Content of what was said
         """
         for observer in self.observers:
-            observer.update(line)
+            # Check if the update method is a coroutine function (async)
+            if asyncio.iscoroutinefunction(observer.update):
+                await observer.update(line)
+            else:
+                observer.update(line)
     
     def load_transcript(self, transcript_json_path: str):
         """Load transcript from a JSON file and set the start time."""
@@ -65,7 +70,7 @@ class TranscriptProcessor:
         with open(self.transcript_file_path, 'w') as f:
             json.dump(meeting_data, f, indent=4)
     
-    def simulate_meeting(self, transcript_json_path: str, time_limit_seconds=None):
+    async def simulate_meeting(self, transcript_json_path: str, time_limit_seconds=None):
         """Simulate a meeting by playing transcript lines at appropriate times."""
         minutes = self.load_transcript(transcript_json_path)
         simulation_start_time = self.start_time
@@ -97,10 +102,10 @@ class TranscriptProcessor:
             wait_time = max(0, simulated_elapsed - real_elapsed)
             
             if wait_time > 0:
-                time.sleep(wait_time)
+                await asyncio.sleep(wait_time)  # Use asyncio.sleep instead of time.sleep
             
             # Now process the line
-            self.add_transcript_line(line)
+            await self.add_transcript_line(line)
             
             # Print in a clearer format
             real_time_now = datetime.datetime.now().strftime('%H:%M:%S')
@@ -112,14 +117,14 @@ class TranscriptProcessor:
             remaining_time = max(0, time_limit_seconds - total_elapsed)
             
             if remaining_time > 0:
-                time.sleep(remaining_time)
+                await asyncio.sleep(remaining_time)  # Use asyncio.sleep instead of time.sleep
             
             print(f"Time limit of {time_limit_seconds} seconds reached. Simulation complete.")
     
-    def add_transcript_line(self, line):
+    async def add_transcript_line(self, line):
         """Add a new line to the transcript and notify observers."""
         self.transcript.append(line)
-        self._notify_observers(line)
+        await self._notify_observers(line)
         self.save_transcript()
         
     def get_full_transcript(self):
