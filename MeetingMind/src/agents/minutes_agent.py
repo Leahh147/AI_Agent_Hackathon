@@ -2,14 +2,13 @@ import openai
 from dotenv import load_dotenv
 import os
 import json
+import re
 
 # Load the .env file
 load_dotenv()
 
 # Get the OpenAI API key from the environment variables
 openai.api_key = os.getenv("API_KEY")
-
-print(openai.api_key)
 
 # Function to generate a response from the OpenAI API
 def generate_agenda_update(transcript_message, last_agenda):
@@ -26,37 +25,51 @@ def generate_agenda_update(transcript_message, last_agenda):
         Your task is to:
         1. Identify the section or subsection in the agenda that corresponds to the transcript.
         2. Update that section or subsection with the details from the transcript.
-        3. Return the index of the updated part (e.g., "1" or "2.1") and the updated version of that part.
+        3. Return a JSON object in this format:
+        {{
+            "updated_index": "section_number",
+            "updated_section": {{
+                "title": "Section Title",
+                "details": "Updated details"
+            }}
+        }}
         """}
     ]
 
     # Requesting OpenAI's response using the new API method
-    response = response = openai.chat.completions.create(
+    response = openai.chat.completions.create(
         model="gpt-4",  # You can use gpt-4 or gpt-3.5-turbo
         messages=messages,
         temperature=0.7,
-        max_tokens=150
+        max_tokens=300
     )
 
+
     # Parsing the response
-    result = response.choices[0].message.content.strip()
-
-    # Extracting the updated section and index
     try:
-        updated_index, updated_details = result.split(":", 1)
-        updated_index = updated_index.strip()
-        updated_details = updated_details.strip()
+        content = response.choices[0].message.content.strip()
 
-        # Ensure that the updated_details have the correct format
-        return {
-            "updated_index": updated_index,
-            "updated_section": {
-                "title": last_agenda["agenda"].get(updated_index.split('.')[0], {}).get("title", ""),
-                "details": updated_details
-            }
-        }
-    except Exception as e:
-        return {"error": f"Error parsing the response: {e}"}
+
+        # Use a regular expression to match all JSON-like portions in the response
+        # Match anything between curly braces {}
+        json_objects = re.findall(r'\{[^{}]*\}', content)
+
+        # Now parse each matched JSON object
+        updates = []
+        for json_str in json_objects:
+            try:
+                updates.append(json.loads(json_str))
+            except json.JSONDecodeError:
+                continue  # Ignore any non-JSON parts
+
+        # If we successfully parsed any updates, return them
+        if updates:
+            return updates
+        else:
+            return {"error": "No valid updates found in response"}
+
+    except json.JSONDecodeError:
+        return {"error": "Error parsing JSON response from OpenAI"}
 
 # Example of the transcript and last meeting agenda
 transcript_message = """
