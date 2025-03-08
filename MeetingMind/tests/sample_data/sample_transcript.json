@@ -1,294 +1,264 @@
 {
     "meeting": {
         "date": "March 8, 2025",
-        "time": "10:00 AM",
+        "time": "10:00:00 AM",
         "attendees": ["Rohan", "Adi", "Kriti", "Oishi", "Diya", "Harsh"],
         "absences": ["Connie", "Leah", "Edward"],
         "minutes": [
             {
-                "timestamp": "10:00:00 AM",
+                "timestamp": "10:00:50 AM",
                 "speaker": "Rohan (President)",
                 "message": "Alright, let’s get started. We have quite a few things to go through today. First off, any matters arising from the last meeting?"
             },
             {
-                "timestamp": "10:00:20 AM",
+                "timestamp": "10:01:05 AM",
                 "speaker": "Adi (Vice President)",
                 "message": "Nothing major, just following up on a few things we discussed last time."
             },
             {
-                "timestamp": "10:00:25 AM",
+                "timestamp": "10:01:35 AM",
                 "speaker": "Rohan",
                 "message": "Good. Let’s move to the main updates."
             },
             {
-                "timestamp": "10:02:00 AM",
-                "update": "President's Update",
-                "discussion": [
-                    {
-                        "timestamp": "10:02:08 AM",
-                        "speaker": "Rohan",
-                        "message": "First, the library budget—£100 allocated for student welfare initiatives. We were thinking of getting a Go board."
-                    },
-                    {
-                        "timestamp": "10:02:28 AM",
-                        "speaker": "Rohan",
-                        "message": "Also, the Department of Welfare is facing budget cuts, so CUES has offered to buy some board games if the library wants them."
-                    },
-                    {
-                        "timestamp": "10:03:08 AM",
-                        "speaker": "Adi",
-                        "message": "Sounds like a good idea. Who’ll coordinate with the library?"
-                    },
-                    {
-                        "timestamp": "10:03:18 AM",
-                        "speaker": "Rohan",
-                        "message": "I can handle that."
-                    },
-                    {
-                        "timestamp": "10:03:28 AM",
-                        "speaker": "Rohan",
-                        "message": "Next, elections—they should be ready today. Everyone make sure to check the details."
-                    },
-                    {
-                        "timestamp": "10:04:08 AM",
-                        "speaker": "Kriti (Operations)",
-                        "message": "I’ll send a reminder out later today."
-                    },
-                    {
-                        "timestamp": "10:04:14 AM",
-                        "speaker": "Rohan",
-                        "message": "Great. Lastly, I had a call with EWOR, a group of unicorn founders."
-                    },
-                    {
-                        "timestamp": "10:04:34 AM",
-                        "speaker": "Rohan",
-                        "message": "One of them, Peter, co-founded an £8 billion startup. They’re interested in hosting a webinar with CUES on the mathematics of building startups."
-                    },
-                    {
-                        "timestamp": "10:04:59 AM",
-                        "speaker": "Rohan",
-                        "message": "The CEO is also willing to give a talk as part of their accelerator program."
-                    },
-                    {
-                        "timestamp": "10:05:08 AM",
-                        "speaker": "Adi",
-                        "message": "That sounds huge! What’s the timeline?"
-                    },
-                    {
-                        "timestamp": "10:05:18 AM",
-                        "speaker": "Rohan",
-                        "message": "No exact date yet. We need to confirm the details."
-                    }
-                ]
+                "timestamp": "10:02:08 AM",
+                "speaker": "Rohan",
+                "message": "First, the library budget—£100 allocated for student welfare initiatives. We were thinking of getting a Go board."
             },
             {
-                "timestamp": "10:10:00 AM",
-                "update": "Vice President's Update",
-                "discussion": [
-                    {
-                        "timestamp": "10:10:08 AM",
-                        "speaker": "Adi",
-                        "message": "A few things."
-                    },
-                    {
-                        "timestamp": "10:10:18 AM",
-                        "speaker": "Adi",
-                        "message": "Committee work – Bank name addition takes time. We should start now."
-                    },
-                    {
-                        "timestamp": "10:10:28 AM",
-                        "speaker": "Adi",
-                        "message": "Also, Rohan, since you have the card, we need to transfer access before you leave."
-                    },
-                    {
-                        "timestamp": "10:10:38 AM",
-                        "speaker": "Adi",
-                        "message": "Grants – We need to sort out Easter term grants for the summer."
-                    },
-                    {
-                        "timestamp": "10:10:48 AM",
-                        "speaker": "Adi",
-                        "message": "Resource changes – We’ll be updating some internal resources; I’ll share a draft next week."
-                    },
-                    {
-                        "timestamp": "10:10:58 AM",
-                        "speaker": "Rohan",
-                        "message": "Noted. Let’s prioritize the bank transfer this week."
-                    }
-                ]
+                "timestamp": "10:02:28 AM",
+                "speaker": "Rohan",
+                "message": "Also, the Department of Welfare is facing budget cuts, so CUES has offered to buy some board games if the library wants them."
             },
             {
-                "timestamp": "10:15:00 AM",
-                "update": "Treasurer’s Update",
-                "discussion": [
-                    {
-                        "timestamp": "10:15:28 AM",
-                        "speaker": "Rohan",
-                        "message": "Budget is in good shape."
-                    },
-                    {
-                        "timestamp": "10:15:38 AM",
-                        "speaker": "Rohan",
-                        "message": "Eng Café funding: Originally, £200 per café for 5 events. We might not need to spend that much."
-                    },
-                    {
-                        "timestamp": "10:15:48 AM",
-                        "speaker": "Rohan",
-                        "message": "Negotiations? We should check if we can get cheaper/free tea if we’re spending £200."
-                    },
-                    {
-                        "timestamp": "10:16:28 AM",
-                        "speaker": "Rohan",
-                        "message": "Leavers' yearbook – Estimated loss?"
-                    },
-                    {
-                        "timestamp": "10:16:38 AM",
-                        "speaker": "Rohan",
-                        "message": "Catering costs: £130 for 3L coffee, 40 half cakes."
-                    },
-                    {
-                        "timestamp": "10:16:48 AM",
-                        "speaker": "Rohan",
-                        "message": "5L of coffee/tea = £60 each."
-                    },
-                    {
-                        "timestamp": "10:16:51 AM",
-                        "speaker": "Rohan",
-                        "message": "Limiting by year group or time slot?"
-                    },
-                    {
-                        "timestamp": "10:16:57 AM",
-                        "speaker": "Adi",
-                        "message": "We should definitely ask about discounts for bulk purchases."
-                    },
-                    {
-                        "timestamp": "10:17:10 AM",
-                        "speaker": "Kriti",
-                        "message": "I’ll check with the café and see if we can negotiate."
-                    }
-                ]
+                "timestamp": "10:03:08 AM",
+                "speaker": "Adi",
+                "message": "Sounds like a good idea. Who’ll coordinate with the library?"
             },
             {
-                "timestamp": "10:20:00 AM",
-                "update": "Sponsorship Update",
-                "discussion": [
-                    {
-                        "timestamp": "10:20:10 AM",
-                        "speaker": "Rohan",
-                        "message": "Careers Fair 2025 venue issues: Kelsey Kerridge unavailable in October. Not sure why."
-                    },
-                    {
-                        "timestamp": "10:20:18 AM",
-                        "speaker": "Rohan",
-                        "message": "Student Services Centre restricting bookings—probably a continuation of last year’s policy."
-                    },
-                    {
-                        "timestamp": "10:20:28 AM",
-                        "speaker": "Rohan",
-                        "message": "This might force us into more expensive venues (Guildhall, hotels)."
-                    },
-                    {
-                        "timestamp": "10:20:38 AM",
-                        "speaker": "Rohan",
-                        "message": "Some alternative venues: Leys School, Chesterton, Uni Sports Centre, JBS?"
-                    },
-                    {
-                        "timestamp": "10:20:48 AM",
-                        "speaker": "Adi",
-                        "message": "Should we offer to pay the Careers Service for their venue?"
-                    },
-                    {
-                        "timestamp": "10:20:58 AM",
-                        "speaker": "Rohan",
-                        "message": "Maybe. Also, Edward mentioned a potential negotiation tactic—offering students £5-10 to boycott the University’s event."
-                    },
-                    {
-                        "timestamp": "10:21:10 AM",
-                        "speaker": "Adi",
-                        "message": "That’s extreme but interesting. Probably more effort than it’s worth, though."
-                    },
-                    {
-                        "timestamp": "10:22:10 AM",
-                        "speaker": "Rohan",
-                        "message": "Agreed. We should focus on venue alternatives first."
-                    }
-                ]
+                "timestamp": "10:03:18 AM",
+                "speaker": "Rohan",
+                "message": "I can handle that."
+            },
+            {
+                "timestamp": "10:03:28 AM",
+                "speaker": "Rohan",
+                "message": "Next, elections—they should be ready today. Everyone make sure to check the details."
+            },
+            {
+                "timestamp": "10:04:08 AM",
+                "speaker": "Kriti (Operations)",
+                "message": "I’ll send a reminder out later today."
+            },
+            {
+                "timestamp": "10:04:14 AM",
+                "speaker": "Rohan",
+                "message": "Great. Lastly, I had a call with EWOR, a group of unicorn founders."
+            },
+            {
+                "timestamp": "10:04:34 AM",
+                "speaker": "Rohan",
+                "message": "One of them, Peter, co-founded an £8 billion startup. They’re interested in hosting a webinar with CUES on the mathematics of building startups."
+            },
+            {
+                "timestamp": "10:04:59 AM",
+                "speaker": "Rohan",
+                "message": "The CEO is also willing to give a talk as part of their accelerator program."
+            },
+            {
+                "timestamp": "10:05:08 AM",
+                "speaker": "Adi",
+                "message": "That sounds huge! What’s the timeline?"
+            },
+            {
+                "timestamp": "10:05:18 AM",
+                "speaker": "Rohan",
+                "message": "No exact date yet. We need to confirm the details."
+            },
+            {
+                "timestamp": "10:10:08 AM",
+                "speaker": "Adi",
+                "message": "A few things."
+            },
+            {
+                "timestamp": "10:10:18 AM",
+                "speaker": "Adi",
+                "message": "Committee work – Bank name addition takes time. We should start now."
+            },
+            {
+                "timestamp": "10:10:28 AM",
+                "speaker": "Adi",
+                "message": "Also, Rohan, since you have the card, we need to transfer access before you leave."
+            },
+            {
+                "timestamp": "10:10:38 AM",
+                "speaker": "Adi",
+                "message": "Grants – We need to sort out Easter term grants for the summer."
+            },
+            {
+                "timestamp": "10:10:48 AM",
+                "speaker": "Adi",
+                "message": "Resource changes – We’ll be updating some internal resources; I’ll share a draft next week."
+            },
+            {
+                "timestamp": "10:10:58 AM",
+                "speaker": "Rohan",
+                "message": "Noted. Let’s prioritize the bank transfer this week."
+            },
+            {
+                "timestamp": "10:15:28 AM",
+                "speaker": "Rohan",
+                "message": "Budget is in good shape."
+            },
+            {
+                "timestamp": "10:15:38 AM",
+                "speaker": "Rohan",
+                "message": "Eng Café funding: Originally, £200 per café for 5 events. We might not need to spend that much."
+            },
+            {
+                "timestamp": "10:15:48 AM",
+                "speaker": "Rohan",
+                "message": "Negotiations? We should check if we can get cheaper/free tea if we’re spending £200."
+            },
+            {
+                "timestamp": "10:16:28 AM",
+                "speaker": "Rohan",
+                "message": "Leavers' yearbook – Estimated loss?"
+            },
+            {
+                "timestamp": "10:16:38 AM",
+                "speaker": "Rohan",
+                "message": "Catering costs: £130 for 3L coffee, 40 half cakes."
+            },
+            {
+                "timestamp": "10:16:48 AM",
+                "speaker": "Rohan",
+                "message": "5L of coffee/tea = £60 each."
+            },
+            {
+                "timestamp": "10:16:51 AM",
+                "speaker": "Rohan",
+                "message": "Limiting by year group or time slot?"
+            },
+            {
+                "timestamp": "10:16:57 AM",
+                "speaker": "Adi",
+                "message": "We should definitely ask about discounts for bulk purchases."
+            },
+            {
+                "timestamp": "10:17:10 AM",
+                "speaker": "Kriti",
+                "message": "I’ll check with the café and see if we can negotiate."
+            },
+            {
+                "timestamp": "10:20:10 AM",
+                "speaker": "Rohan",
+                "message": "Careers Fair 2025 venue issues: Kelsey Kerridge unavailable in October. Not sure why."
+            },
+            {
+                "timestamp": "10:20:18 AM",
+                "speaker": "Rohan",
+                "message": "Student Services Centre restricting bookings—probably a continuation of last year’s policy."
+            },
+            {
+                "timestamp": "10:20:28 AM",
+                "speaker": "Rohan",
+                "message": "This might force us into more expensive venues (Guildhall, hotels)."
+            },
+            {
+                "timestamp": "10:20:38 AM",
+                "speaker": "Rohan",
+                "message": "Some alternative venues: Leys School, Chesterton, Uni Sports Centre, JBS?"
+            },
+            {
+                "timestamp": "10:20:48 AM",
+                "speaker": "Adi",
+                "message": "Should we offer to pay the Careers Service for their venue?"
+            },
+            {
+                "timestamp": "10:20:58 AM",
+                "speaker": "Rohan",
+                "message": "Maybe. Also, Edward mentioned a potential negotiation tactic—offering students £5-10 to boycott the University’s event."
+            },
+            {
+                "timestamp": "10:21:10 AM",
+                "speaker": "Adi",
+                "message": "That’s extreme but interesting. Probably more effort than it’s worth, though."
+            },
+            {
+                "timestamp": "10:22:10 AM",
+                "speaker": "Rohan",
+                "message": "Agreed. We should focus on venue alternatives first."
             },
             {
                 "timestamp": "10:28:00 AM",
-                "update": "Opportunities Update",
-                "discussion": [
-                    {
-                        "timestamp": "10:28:00 AM",
-                        "speaker": "Kriti",
-                        "message": "Diversity and Access – ongoing."
-                    },
-                    {
-                        "timestamp": "10:28:10 AM",
-                        "speaker": "Kriti",
-                        "message": "Welfare events: Jacks’ gelato bike options: £480 for 60 guests (unlimited ice cream), £150 base + £3pp single, £4pp double, £280 min spend."
-                    },
-                    {
-                        "timestamp": "10:28:30 AM",
-                        "speaker": "Kriti",
-                        "message": "Alternative location: Move to Coe Fen if courtyard is unavailable?"
-                    },
-                    {
-                        "timestamp": "10:28:40 AM",
-                        "speaker": "Kriti",
-                        "message": "Jacks Gelato is not responsive right now."
-                    },
-                    {
-                        "timestamp": "10:28:50 AM",
-                        "speaker": "Kriti",
-                        "message": "I’ll try calling them again later today."
-                    },
-                    {
-                        "timestamp": "10:29:00 AM",
-                        "speaker": "Rohan",
-                        "message": "Alright, let’s move on to other opportunities."
-                    },
-                    {
-                        "timestamp": "10:29:10 AM",
-                        "speaker": "Kriti",
-                        "message": "Collaborations with societies—still in the works. I’ll send out another email to finalize the partnerships."
-                    },
-                    {
-                        "timestamp": "10:29:30 AM",
-                        "speaker": "Rohan",
-                        "message": "Perfect. Just make sure we have everything confirmed before the end of the month."
-                    },
-                    {
-                        "timestamp": "10:29:40 AM",
-                        "speaker": "Kriti",
-                        "message": "Will do. And finally, events for the summer term—we need to start planning those."
-                    },
-                    {
-                        "timestamp": "10:29:50 AM",
-                        "speaker": "Rohan",
-                        "message": "Absolutely. Let’s discuss that in the next meeting."
-                    },
-                    {
-                        "timestamp": "10:30:00 AM",
-                        "speaker": "Rohan",
-                        "message": "Alright, that’s all for today’s meeting. Any final thoughts or questions before we wrap up?"
-                    },
-                    {
-                        "timestamp": "10:30:10 AM",
-                        "speaker": "Adi",
-                        "message": "Nothing from me. Looking forward to the upcoming events!"
-                    },
-                    {
-                        "timestamp": "10:30:20 AM",
-                        "speaker": "Kriti",
-                        "message": "Same here. I’ll keep everyone posted on updates."
-                    },
-                    {
-                        "timestamp": "10:30:30 AM",
-                        "speaker": "Rohan",
-                        "message": "Great. Thanks, everyone. Meeting adjourned."
-                    }
-                ]
+                "speaker": "Kriti",
+                "message": "Diversity and Access – ongoing."
+            },
+            {
+                "timestamp": "10:28:10 AM",
+                "speaker": "Kriti",
+                "message": "Welfare events: Jacks’ gelato bike options: £480 for 60 guests (unlimited ice cream), £150 base + £3pp single, £4pp double, £280 min spend."
+            },
+            {
+                "timestamp": "10:28:30 AM",
+                "speaker": "Kriti",
+                "message": "Alternative location: Move to Coe Fen if courtyard is unavailable?"
+            },
+            {
+                "timestamp": "10:28:40 AM",
+                "speaker": "Kriti",
+                "message": "Jacks Gelato is not responsive right now."
+            },
+            {
+                "timestamp": "10:28:50 AM",
+                "speaker": "Kriti",
+                "message": "I’ll try calling them again later today."
+            },
+            {
+                "timestamp": "10:29:00 AM",
+                "speaker": "Rohan",
+                "message": "Alright, let’s move on to other opportunities."
+            },
+            {
+                "timestamp": "10:29:10 AM",
+                "speaker": "Kriti",
+                "message": "Collaborations with societies—still in the works. I’ll send out another email to finalize the partnerships."
+            },
+            {
+                "timestamp": "10:29:30 AM",
+                "speaker": "Rohan",
+                "message": "Perfect. Just make sure we have everything confirmed before the end of the month."
+            },
+            {
+                "timestamp": "10:29:40 AM",
+                "speaker": "Kriti",
+                "message": "Will do. And finally, events for the summer term—we need to start planning those."
+            },
+            {
+                "timestamp": "10:29:50 AM",
+                "speaker": "Rohan",
+                "message": "Absolutely. Let’s discuss that in the next meeting."
+            },
+            {
+                "timestamp": "10:30:00 AM",
+                "speaker": "Rohan",
+                "message": "Alright, that’s all for today’s meeting. Any final thoughts or questions before we wrap up?"
+            },
+            {
+                "timestamp": "10:30:10 AM",
+                "speaker": "Adi",
+                "message": "Nothing from me. Looking forward to the upcoming events!"
+            },
+            {
+                "timestamp": "10:30:20 AM",
+                "speaker": "Kriti",
+                "message": "Same here. I’ll keep everyone posted on updates."
+            },
+            {
+                "timestamp": "10:30:30 AM",
+                "speaker": "Rohan",
+                "message": "Great. Thanks, everyone. Meeting adjourned."
             }
         ]
     }
