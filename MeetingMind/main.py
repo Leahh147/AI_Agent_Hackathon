@@ -9,8 +9,6 @@ async def main():
     
     # Set paths for input and output files
     sample_transcript_path = os.path.join(project_root, "tests", "sample_data", "sample_transcript.json")
-    print(f"Transcript path: {sample_transcript_path}")
-    print(f"File exists: {os.path.exists(sample_transcript_path)}")  # Debug check
     output_transcript_path = os.path.join(project_root, "output_transcript.json")
     
     # Create processor and agent
@@ -22,12 +20,6 @@ async def main():
     
     # Start simulation - now properly awaiting the async method
     await processor.simulate_meeting(sample_transcript_path, time_limit_seconds=120) # Set time simulation limit 
-    
-    # At the end, we can retrieve the processed minutes
-    final_minutes = minutes_agent.get_minutes()
-    print("\nFinal Minutes:")
-    for minute in final_minutes[:3]:  # Just show the first few
-        print(f"{minute['timestamp']} - {minute['speaker']}: {minute['summary']}")
 
 if __name__ == "__main__":
     # Run the async main function

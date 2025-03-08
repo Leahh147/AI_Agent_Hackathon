@@ -22,7 +22,6 @@ class TranscriptProcessor:
         if observer in self.observers:
             self.observers.remove(observer)
 
-
     async def _notify_observers(self, line):
         """
         Notify all observers about a new transcript line.
@@ -36,7 +35,6 @@ class TranscriptProcessor:
         - 'message': Content of what was said
         """
         for observer in self.observers:
-            # Check if the update method is a coroutine function (async)
             if asyncio.iscoroutinefunction(observer.update):
                 await observer.update(line)
             else:
@@ -76,7 +74,6 @@ class TranscriptProcessor:
         simulation_start_time = self.start_time
         real_simulation_start = datetime.datetime.now()
         
-        print(f"Simulation started at real time: {real_simulation_start.strftime('%H:%M:%S')}")
         print(f"Simulating meeting from transcript time: {simulation_start_time.strftime('%I:%M:%S %p')}")
         
         # Process all lines that fall within the time limit
@@ -109,7 +106,7 @@ class TranscriptProcessor:
             
             # Print in a clearer format
             real_time_now = datetime.datetime.now().strftime('%H:%M:%S')
-            print(f"[Real time: {real_time_now}] Processed line with timestamp {line['timestamp']}: {line['speaker']}: {line['message'][:50]}...")
+            print(f"Updated line with timestamp {line['timestamp']}: {line['speaker']}: {line['message'][:50]}...")
         
         # Wait until the full time limit has elapsed if specified
         if time_limit_seconds:

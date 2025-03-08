@@ -121,12 +121,13 @@ class MinutesAgent:
             Your task is to:
             1. Identify IF the section or subsection in the agenda corresponds to the transcript.
             2. ONLY if the transcript contains relevant information, update that section/subsection.
-            3. The updated content to update are should be a summary of key details extracted from the transcript message.
-            3. Return ONLY a JSON object in this format:
+            3. The updated content should be a summary of detailed extracted from the transcript message.
+                Each updated content will be added to a running list of details for that section/subsection.
+            4. Return ONLY a JSON object in this format:
             {{
                 "section": "2", 
                 "subsection": "2.1", // only include if updating a subsection
-                "details": "Updated content" // include relevant details from transcript
+                "details": "Updated content" // Single, specific point from the transcript message
             }}
 
             If the transcript doesn't contain any information relevant to the agenda, return:
@@ -166,13 +167,24 @@ class MinutesAgent:
         subsection = update.get("subsection", None)
         details = update.get("details", "")
         
-        if not section or section not in self.minutes_structure["agenda"]:
+        # Skip updating if section is missing or details is empty
+        if not section or section not in self.minutes_structure["agenda"] or not details:
             return
             
         if not subsection:
             # Update main section
-            self.minutes_structure["agenda"][section]["details"] = details
-            print(f"Updated section {section} with: {details[:30]}...")
+            if "details" not in self.minutes_structure["agenda"][section]:
+                self.minutes_structure["agenda"][section]["details"] = [details]
+            elif isinstance(self.minutes_structure["agenda"][section]["details"], list):
+                self.minutes_structure["agenda"][section]["details"].append(details)
+            else:
+                # Handle empty string case
+                existing_details = self.minutes_structure["agenda"][section]["details"]
+                if existing_details == "":
+                    self.minutes_structure["agenda"][section]["details"] = [details]
+                else:
+                    self.minutes_structure["agenda"][section]["details"] = [existing_details, details]
+            print(f"Added point to section {section}: {details[:30]}...")
         else:
             # Handle nested subsections
             section_data = self.minutes_structure["agenda"][section]
@@ -180,11 +192,22 @@ class MinutesAgent:
             # Check if the section has subsections
             if "subsections" not in section_data:
                 return
-                
+                    
             # Check if the exact subsection exists
             if subsection in section_data["subsections"]:
-                section_data["subsections"][subsection]["details"] = details
-                print(f"Updated subsection {section}.{subsection} with: {details[:30]}...")
+                subsection_data = section_data["subsections"][subsection]
+                if "details" not in subsection_data:
+                    subsection_data["details"] = [details]
+                elif isinstance(subsection_data["details"], list):
+                    subsection_data["details"].append(details)
+                else:
+                    # Handle empty string case
+                    existing_details = subsection_data["details"]
+                    if existing_details == "":
+                        subsection_data["details"] = [details]
+                    else:
+                        subsection_data["details"] = [existing_details, details]
+                print(f"Added point to subsection {section}.{subsection}: {details[:30]}...")
     
     def save_minutes(self):
         """Save the current minutes structure to a file."""
