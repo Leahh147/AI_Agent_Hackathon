@@ -6,19 +6,19 @@
         "absences": ["Connie", "Leah", "Edward"],
         "minutes": [
             {
-                "timestamp": "10:00:50 AM",
+                "timestamp": "10:00:05 AM",
                 "speaker": "Rohan (President)",
-                "message": "Alright, let’s get started. We have quite a few things to go through today. First off, any matters arising from the last meeting?"
+                "message": "Alright, let's get started. We have quite a few things to go through today. First off, any matters arising from the last meeting?"
             },
             {
-                "timestamp": "10:01:05 AM",
+                "timestamp": "10:00:15 AM",
                 "speaker": "Adi (Vice President)",
                 "message": "Nothing major, just following up on a few things we discussed last time."
             },
             {
-                "timestamp": "10:01:35 AM",
+                "timestamp": "10:00:25 AM",
                 "speaker": "Rohan",
-                "message": "Good. Let’s move to the main updates."
+                "message": "Good. Let's move to the main updates."
             },
             {
                 "timestamp": "10:02:08 AM",
@@ -33,7 +33,7 @@
             {
                 "timestamp": "10:03:08 AM",
                 "speaker": "Adi",
-                "message": "Sounds like a good idea. Who’ll coordinate with the library?"
+                "message": "Sounds like a good idea. Who'll coordinate with the library?"
             },
             {
                 "timestamp": "10:03:18 AM",
@@ -48,7 +48,7 @@
             {
                 "timestamp": "10:04:08 AM",
                 "speaker": "Kriti (Operations)",
-                "message": "I’ll send a reminder out later today."
+                "message": "I'll send a reminder out later today."
             },
             {
                 "timestamp": "10:04:14 AM",
@@ -58,7 +58,7 @@
             {
                 "timestamp": "10:04:34 AM",
                 "speaker": "Rohan",
-                "message": "One of them, Peter, co-founded an £8 billion startup. They’re interested in hosting a webinar with CUES on the mathematics of building startups."
+                "message": "One of them, Peter, co-founded an £8 billion startup. They're interested in hosting a webinar with CUES on the mathematics of building startups."
             },
             {
                 "timestamp": "10:04:59 AM",
@@ -68,7 +68,7 @@
             {
                 "timestamp": "10:05:08 AM",
                 "speaker": "Adi",
-                "message": "That sounds huge! What’s the timeline?"
+                "message": "That sounds huge! What's the timeline?"
             },
             {
                 "timestamp": "10:05:18 AM",
@@ -76,34 +76,34 @@
                 "message": "No exact date yet. We need to confirm the details."
             },
             {
-                "timestamp": "10:10:08 AM",
+                "timestamp": "10:06:08 AM",
                 "speaker": "Adi",
                 "message": "A few things."
             },
             {
-                "timestamp": "10:10:18 AM",
+                "timestamp": "10:06:18 AM",
                 "speaker": "Adi",
                 "message": "Committee work – Bank name addition takes time. We should start now."
             },
             {
-                "timestamp": "10:10:28 AM",
+                "timestamp": "10:06:28 AM",
                 "speaker": "Adi",
                 "message": "Also, Rohan, since you have the card, we need to transfer access before you leave."
             },
             {
                 "timestamp": "10:10:38 AM",
-                "speaker": "Adi",
+                "speaker": "Adi",                                                                                 
                 "message": "Grants – We need to sort out Easter term grants for the summer."
             },
             {
                 "timestamp": "10:10:48 AM",
                 "speaker": "Adi",
-                "message": "Resource changes – We’ll be updating some internal resources; I’ll share a draft next week."
+                "message": "Resource changes – We'll be updating some internal resources; I'll share a draft next week."
             },
             {
                 "timestamp": "10:10:58 AM",
                 "speaker": "Rohan",
-                "message": "Noted. Let’s prioritize the bank transfer this week."
+                "message": "Noted. Let's prioritize the bank transfer this week."
             },
             {
                 "timestamp": "10:15:28 AM",
@@ -118,7 +118,7 @@
             {
                 "timestamp": "10:15:48 AM",
                 "speaker": "Rohan",
-                "message": "Negotiations? We should check if we can get cheaper/free tea if we’re spending £200."
+                "message": "Negotiations? We should check if we can get cheaper/free tea if we're spending £200."
             },
             {
                 "timestamp": "10:16:28 AM",
@@ -148,7 +148,7 @@
             {
                 "timestamp": "10:17:10 AM",
                 "speaker": "Kriti",
-                "message": "I’ll check with the café and see if we can negotiate."
+                "message": "I'll check with the café and see if we can negotiate."
             },
             {
                 "timestamp": "10:20:10 AM",
@@ -158,7 +158,7 @@
             {
                 "timestamp": "10:20:18 AM",
                 "speaker": "Rohan",
-                "message": "Student Services Centre restricting bookings—probably a continuation of last year’s policy."
+                "message": "Student Services Centre restricting bookings—probably a continuation of last year's policy."
             },
             {
                 "timestamp": "10:20:28 AM",
@@ -178,12 +178,12 @@
             {
                 "timestamp": "10:20:58 AM",
                 "speaker": "Rohan",
-                "message": "Maybe. Also, Edward mentioned a potential negotiation tactic—offering students £5-10 to boycott the University’s event."
+                "message": "Maybe. Also, Edward mentioned a potential negotiation tactic—offering students £5-10 to boycott the University's event."
             },
             {
                 "timestamp": "10:21:10 AM",
                 "speaker": "Adi",
-                "message": "That’s extreme but interesting. Probably more effort than it’s worth, though."
+                "message": "That's extreme but interesting. Probably more effort than it's worth, though."
             },
             {
                 "timestamp": "10:22:10 AM",
@@ -198,7 +198,7 @@
             {
                 "timestamp": "10:28:10 AM",
                 "speaker": "Kriti",
-                "message": "Welfare events: Jacks’ gelato bike options: £480 for 60 guests (unlimited ice cream), £150 base + £3pp single, £4pp double, £280 min spend."
+                "message": "Welfare events: Jacks' gelato bike options: £480 for 60 guests (unlimited ice cream), £150 base + £3pp single, £4pp double, £280 min spend."
             },
             {
                 "timestamp": "10:28:30 AM",
@@ -213,17 +213,17 @@
             {
                 "timestamp": "10:28:50 AM",
                 "speaker": "Kriti",
-                "message": "I’ll try calling them again later today."
+                "message": "I'll try calling them again later today."
             },
             {
                 "timestamp": "10:29:00 AM",
                 "speaker": "Rohan",
-                "message": "Alright, let’s move on to other opportunities."
+                "message": "Alright, let's move on to other opportunities."
             },
             {
                 "timestamp": "10:29:10 AM",
                 "speaker": "Kriti",
-                "message": "Collaborations with societies—still in the works. I’ll send out another email to finalize the partnerships."
+                "message": "Collaborations with societies—still in the works. I'll send out another email to finalize the partnerships."
             },
             {
                 "timestamp": "10:29:30 AM",
@@ -238,12 +238,12 @@
             {
                 "timestamp": "10:29:50 AM",
                 "speaker": "Rohan",
-                "message": "Absolutely. Let’s discuss that in the next meeting."
+                "message": "Absolutely. Let's discuss that in the next meeting."
             },
             {
                 "timestamp": "10:30:00 AM",
                 "speaker": "Rohan",
-                "message": "Alright, that’s all for today’s meeting. Any final thoughts or questions before we wrap up?"
+                "message": "Alright, that's all for today's meeting. Any final thoughts or questions before we wrap up?"
             },
             {
                 "timestamp": "10:30:10 AM",
@@ -253,7 +253,7 @@
             {
                 "timestamp": "10:30:20 AM",
                 "speaker": "Kriti",
-                "message": "Same here. I’ll keep everyone posted on updates."
+                "message": "Same here. I'll keep everyone posted on updates."
             },
             {
                 "timestamp": "10:30:30 AM",
