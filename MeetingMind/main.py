@@ -15,7 +15,7 @@ async def main():
     # Create processor and agent
     processor = TranscriptProcessor(transcript_file_path=output_transcript_path)
     minutes_agent = MinutesAgent()
-    context_agent = ContextAgent(api_key="your_openai_api_key", minutes_agent=minutes_agent)
+    context_agent = ContextAgent(minutes_agent=minutes_agent)
     
     # Register agent as observer of latest transcripts
     processor.register_observer(minutes_agent)
