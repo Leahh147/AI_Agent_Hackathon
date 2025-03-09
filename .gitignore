@@ -17,3 +17,6 @@ __pycache__/
 
 **/final_minutes.json
 **/output_transcript.json
+
+**/credentials.json
+**/token.pickle

@@ -15,18 +15,19 @@ load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
 class MinutesAgent:
-    def __init__(self, name="MinutesAgent", google_doc_id = None):
+    def __init__(self, name="MinutesAgent", google_doc_id = None, context_agent=None):
         self.name = name
-        self.minutes = []
         self.processing_lock = asyncio.Lock()  # Lock for synchronizing updates
         self.transcript_queue = asyncio.Queue()  # Queue for transcript lines
         self.processing_task = None  # Task for processing the queue
         self.google_doc_id = google_doc_id
-        self.current_topic_start_timestamp = None  # Track the starting timestamp of the current topic
-        self.current_timestamp = None  # Track the current timestamp
-        
+        self.current_scope = None
         # Get the project root directory
         self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        # self.prev_minutes_structure = None
+        # self.minutes_structure = None
+
+        self.context_agent = context_agent
         
         # Set paths for files
         self.sample_minute_path = os.path.join(
@@ -79,11 +80,6 @@ class MinutesAgent:
     async def update(self, transcript_line):
         """Called when a new transcript line is added. Adds the line to the processing queue."""
         print(f"{self.name} received: {transcript_line['speaker']} said: {transcript_line['message']}")
-            
-        self.minutes.append({
-            "timestamp": transcript_line['timestamp'],
-            "speaker": transcript_line['speaker'],
-        })
         
         # Add to the processing queue instead of processing immediately
         await self.transcript_queue.put(transcript_line)
@@ -100,7 +96,7 @@ class MinutesAgent:
             # Process the update and modify the minutes structure if needed
             if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
 
-                self.update_minutes_structure(update, transcript_line['timestamp'])
+                self.update_minutes_structure(update)
                  # Update Google Doc with the new detail
                 self.update_google_doc(
                     update.get("section"), 
@@ -110,6 +106,11 @@ class MinutesAgent:
 
                 # Save the updated structure
                 self.save_minutes()
+
+                should_listen_in = await self.context_agent.should_listen_in(self.current_scope)
+                if should_listen_in:
+                    print("Adi should listen in!")
+
     
     async def generate_agenda_update_async(self, transcript_message, last_agenda):
         """Async version of generate_agenda_update."""
@@ -165,15 +166,19 @@ class MinutesAgent:
         else:
             return {"section": None, "details": None}
     
-    def update_minutes_structure(self, update, timestamp):
+    def update_minutes_structure(self, update):
         """Update the minutes structure with the new information."""
         section = update.get("section")
         subsection = update.get("subsection", None)
         details = update.get("details", "")
+
+        self.prev_minutes_structure = deepcopy(self.minutes_structure)
         
         # Skip updating if section is missing or details is empty
         if not section or section not in self.minutes_structure["agenda"] or not details:
             return
+        
+        self.current_scope = self.minutes_structure["agenda"][section]
             
         if not subsection:
             # Update main section
@@ -212,13 +217,9 @@ class MinutesAgent:
                     else:
                         subsection_data["details"] = [existing_details, details]
                 print(f"Added point to subsection {section}.{subsection}: {details[:30]}...")
-        
-        # Update the current topic start timestamp if starting a new section or subsection
-        if not self.current_topic_start_timestamp or section != self.current_topic_start_timestamp.get("section") or subsection != self.current_topic_start_timestamp.get("subsection"):
-            self.current_topic_start_timestamp = {"section": section, "subsection": subsection, "timestamp": timestamp}
-        
-        # Update the current timestamp
-        self.current_timestamp = timestamp
+            self.current_scope = section_data["subsections"][subsection]
+
+        self.update_state = True
 
     def update_google_doc(self, section, subsection, details):
         """Update the Google Doc with a newly added detail."""
@@ -246,17 +247,8 @@ class MinutesAgent:
         """Return the generated minutes."""
         return self.minutes_structure
     
-    def get_current_topic_start_timestamp(self):
-        """Return the starting timestamp of the current topic."""
-        return self.current_topic_start_timestamp
+    def get_current_topic(self):
+        return self.current_scope
     
-    def get_minutes_within_timestamp(self, start_timestamp, end_timestamp):
-        """Return the minutes within the given timestamp range."""
-        return [
-            minute for minute in self.minutes
-            if start_timestamp <= minute['timestamp'] <= end_timestamp
-        ]
-    
-    def get_current_timestamp(self):
-        """Return the current timestamp."""
-        return self.current_timestamp
+    # def context_agent_can_update(self):
+    #     return self.prev_minutes_structure == self.minutes_structure
