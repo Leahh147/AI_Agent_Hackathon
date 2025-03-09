@@ -25,7 +25,7 @@ pip install -r requirements.txt
 ## Set up the Environment Variables
 In your .env file
 ```bash
-OPENAI_API_KEY=your_openai_api_key
+API_KEY=your_openai_api_key
 DISCORD_WEBHOOK_URL=your_discord_webhook_url
 ```
 
