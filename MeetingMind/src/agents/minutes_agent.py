@@ -360,8 +360,8 @@ class MinutesAgent:
             # This should be configured with actual user IDs for your team
             user_id_mapping = {
                 # Speakers and participants with their Discord user IDs
-                "Adi": 1346615174169231425,
-                "Oishi": 401599932932292608,
+                "Oishi": 1346615174169231425,
+                "Adi": 401599932932292608,
                 "Harsh": 401599932932292608,
                 "Diya": 1160641318347882506,
                 "Rohan": 731882462313185350,
@@ -396,7 +396,7 @@ class MinutesAgent:
                         
                         # Send message to relevant participant
                         asyncio.run_coroutine_threadsafe(
-                            self.discord_notifier.send_dm(person_id, person_message),
+                            self.discord_notifier.send_dm_participate(person_id, person_message),
                             self.discord_notifier.loop
                         )
                         print(f"Sent relevance notification to {person}")

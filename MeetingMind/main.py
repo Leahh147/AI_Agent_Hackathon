@@ -21,11 +21,10 @@ async def main():
     # Create processor and agent
     processor = TranscriptProcessor(transcript_file_path=output_transcript_path)
     minutes_doc_id = '1W6BTAWwDpQL_X3dD02Z4j9AbHHTDSek0iOWc0f6MkDM'  # minutes template doc ID
-    discord_token = "MTM0Nzk5NTI2OTgzNjMwODUwMQ.Gjr8ag.E660ddgmZ2vVT4ILbq1X30MR9gBqxF3oy9sZrY"
-    CHANNEL_ID = 1347996655013597227
-    minutes_agent = MinutesAgent(google_doc_id = minutes_doc_id, discord_token = discord_token, discord_channel_id=CHANNEL_ID)
+
+    minutes_agent = MinutesAgent(google_doc_id = minutes_doc_id)
     context_agent = ContextAgent(minutes_agent = minutes_agent)
-    action_agent = ActionAgent()
+    action_agent = ActionAgent(discord_token = discord_token, discord_channel_id=CHANNEL_ID)
     
     # Register agent as observer of latest transcripts
     processor.register_observer(minutes_agent)
@@ -33,7 +32,7 @@ async def main():
     processor.register_meeting_end_handler(action_agent.meeting_end_handler)
     
     # Start simulation - now properly awaiting the async method
-    await processor.simulate_meeting(sample_transcript_path, time_limit_seconds=120) # Set time simulation limit 
+    await processor.simulate_meeting(sample_transcript_path, time_limit_seconds=60) # Set time simulation limit 
 
     # during simulation, push notification if context_agent judges we should listen in
 
