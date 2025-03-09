@@ -1,108 +1,85 @@
-import time
-import threading
-
-
-import time
+import asyncio
 
 
 class KeywordMonitor:
-    def __init__(self, team_keywords, notify_callback):
+    def __init__(self, team_keywords, notifier):
         """
-        Initializes the keyword monitoring system.
-
-        :param team_keywords: Dictionary where keys are roles, and values are lists of keywords.
-        :param notify_callback: Function to call when a keyword is detected.
+        :param team_keywords: Dictionary of roles and their associated keywords.
+        :param notifier: Instance of DiscordNotifier to send alerts.
         """
         self.team_keywords = {
             role: set(keywords) for role, keywords in team_keywords.items()
         }
-        self.notify_callback = notify_callback
+        self.notifier = notifier  # Store the DiscordNotifier instance
         self.active = True
         self.detected_roles = {role: "No" for role in team_keywords}
+        self.user_ids = {
+            "Marketing and Communications Director": 1346615174169231425,
+            "Event Director": 401599932932292608,
+            "Treasurer": 1160641318347882506,
+            "Sponsorship": 731882462313185350,
+        }
 
     def process_transcript_line(self, speaker, content, timestamp):
         """
-        Processes a single line of transcript.
+        Detects keywords in a transcript and notifies via Discord.
 
-        :param speaker: Name of the speaker.
-        :param content: Text spoken by the speaker.
-        :param timestamp: Time at which the text was spoken.
+        :param speaker: Who spoke the content.
+        :param content: What was said.
+        :param timestamp: When it was spoken.
         """
         if not self.active:
             return
 
+        detected = []
         for role, keywords in self.team_keywords.items():
             for keyword in keywords:
                 if keyword.lower() in content.lower():
-                    print(
-                        f"[ALERT] Keyword '{keyword}' detected at {timestamp} by {speaker}. Role: {role}"
-                    )
-                    self.notify_callback(speaker, content, timestamp, keyword)
-                    self.detected_roles[role] = "Yes"  # Mark role as detected
-                    break  # Stop checking further once a keyword is found
+                    alert_msg = f"[ALERT] '{keyword}' detected at {timestamp} by {speaker}. Role: {role}"
+                    print(alert_msg)
+
+                    # Store detected role
+                    self.detected_roles[role] = "Yes"
+                    detected.append(role)
+                    break  # Stop checking after finding a match
+
+        # If any roles were detected, trigger Discord notification
+        if detected:
+            self.notify_discord(detected, speaker, timestamp, content)
+
+    def notify_discord(
+        self, detected_roles, speaker, timestamp, message_content
+    ):
+        """
+        Sends a DM to each user corresponding to the detected role(s).
+
+        :param detected_roles: List of roles detected.
+        :param speaker: Who spoke the content.
+        :param timestamp: When it was spoken.
+        :param message_content: The full message content that triggered the detection.
+        """
+        # Format the message to send
+        discord_message = (
+            f"🚨 **Keyword Alert!** 🚨\n"
+            f"🔹 **Speaker:** {speaker}\n"
+            f"🔹 **Time:** {timestamp}\n"
+            f'📝 **Message:** "{message_content}"'
+        )
+
+        # Iterate over the detected roles and send a DM if the role is in the mapping.
+        for role in detected_roles:
+            if role in self.user_ids:
+                user_id = self.user_ids[role]
+                print(
+                    f"Sending DM to user for role: {role} (User ID: {user_id})"
+                )
+                asyncio.run_coroutine_threadsafe(
+                    self.notifier.send_dm(user_id, discord_message),
+                    self.notifier.loop,
+                )
+            else:
+                print(f"Role '{role}' not found in USER_ID mapping.")
 
     def get_detection_status(self):
-        """Returns the dictionary indicating which roles have been detected."""
+        """Returns which roles have been detected."""
         return self.detected_roles
-
-    def pause_monitoring(self):
-        """Pauses keyword monitoring."""
-        self.active = False
-        print("Keyword monitoring paused.")
-
-    def resume_monitoring(self):
-        """Resumes keyword monitoring."""
-        self.active = True
-        print("Keyword monitoring resumed.")
-
-
-# Example notification function
-def notify_user(speaker, content, timestamp, keyword):
-    print(
-        f"[NOTIFY] User notification: '{keyword}' mentioned by {speaker} at {timestamp}. Content: {content}"
-    )
-
-
-# Example usage
-if __name__ == "__main__":
-    team_keywords = {
-        "Sponsorship": ["Edward", "Industry", "Sponsorship", "Sponsor"],
-        "President": ["Rohan", "External relations", "Collaboration"],
-        "Marketing and Communications Director": [
-            "Leah",
-            "Marketing strategy",
-            "Event promotion",
-            "Publicity",
-        ],
-        "Event Director": ["Oishi", "Diya", "Event planning"],
-        "Treasurer": ["Connie", "Financial management", "Budgeting"],
-        "Opportunities Director": ["Kriti", "Welfare"],
-        "Vice President": ["Adi", "Internal management"],
-        "Technology Director": ["Harsh", "Technology support"],
-    }
-
-    monitor = KeywordMonitor(team_keywords, notify_user)
-
-    # Simulated transcript processing
-    transcript_data = [
-        (
-            "Edward",
-            "We need to review the sponsorship proposal soon.",
-            "10:05 AM",
-        ),
-        ("Bob", "This is an urgent matter for the event team.", "10:06 AM"),
-        (
-            "Leah",
-            "Let's discuss marketing strategy for the campaign.",
-            "10:07 AM",
-        ),
-    ]
-
-    for entry in transcript_data:
-        speaker, content, timestamp = entry
-        monitor.process_transcript_line(speaker, content, timestamp)
-        time.sleep(1)  # Simulating real-time progression
-
-    # Output detection status
-    detection_status = monitor.get_detection_status()
-    print(detection_status)
