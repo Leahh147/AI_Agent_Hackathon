@@ -6,6 +6,7 @@ import re
 import asyncio
 from copy import deepcopy
 from typing import List, Dict, Any
+from src.services.google_doc_service import append_detail_to_doc
 
 # Load the .env file
 load_dotenv()
@@ -14,12 +15,13 @@ load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
 class MinutesAgent:
-    def __init__(self, name="MinutesAgent"):
+    def __init__(self, name="MinutesAgent", google_doc_id = None):
         self.name = name
         self.minutes = []
         self.processing_lock = asyncio.Lock()  # Lock for synchronizing updates
         self.transcript_queue = asyncio.Queue()  # Queue for transcript lines
         self.processing_task = None  # Task for processing the queue
+        self.google_doc_id = google_doc_id
         self.current_topic_start_timestamp = None  # Track the starting timestamp of the current topic
         self.current_timestamp = None  # Track the current timestamp
         
@@ -98,7 +100,15 @@ class MinutesAgent:
             
             # Process the update and modify the minutes structure if needed
             if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
+
                 self.update_minutes_structure(update, transcript_line['timestamp'])
+                 # Update Google Doc with the new detail
+                self.update_google_doc(
+                    update.get("section"), 
+                    update.get("subsection"), 
+                    update.get("details")
+                )
+
                 # Save the updated structure
                 self.save_minutes()
     
@@ -210,12 +220,26 @@ class MinutesAgent:
         
         # Update the current timestamp
         self.current_timestamp = timestamp
+
+    def update_google_doc(self, section, subsection, details):
+        """Update the Google Doc with a newly added detail."""
+        if not hasattr(self, 'google_doc_id') or not self.google_doc_id:
+            return
+        
+        # Determine the section identifier
+        section_id = f"{section}." if not subsection else subsection
+        
+        try:
+            append_detail_to_doc(self.google_doc_id, section_id, details)
+        except Exception as e:
+            print(f"Error updating Google Doc: {e}")
     
     def save_minutes(self):
         """Save the current minutes structure to a file."""
         try:
             with open(self.output_path, 'w') as f:
                 json.dump(self.minutes_structure, f, indent=2)
+
         except Exception as e:
             print(f"Error saving minutes: {e}")
     
