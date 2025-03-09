@@ -6,6 +6,8 @@
     "agenda": {
       "1": {
         "title": "Matters Arising from Last Meeting",
+        "speaker": "Adi",
+        "relevance": ["Rohan", "Kriti", "Oishi", "Diya", "Harsh"],
         "details": ""
       },
       "2": {
@@ -13,10 +15,14 @@
         "subsections": {
           "2.1": {
             "title": "Library Budget",
+            "speaker": "Rohan",
+            "relevance": ["Adi", "Kriti"],
             "details": ""
           },
           "2.2": {
             "title": "Elections",
+            
+            "relevance": [ "Oishi"],
             "details": ""
           },
           "2.3": {
