@@ -6,6 +6,8 @@
     "agenda": {
       "1": {
         "title": "Matters Arising from Last Meeting",
+        "speaker": "Adi",
+        "relevance": ["Rohan", "Kriti", "Oishi", "Diya", "Harsh"],
         "details": ""
       },
       "2": {
@@ -13,14 +15,20 @@
         "subsections": {
           "2.1": {
             "title": "Library Budget",
+            "speaker": "Rohan",
+            "relevance": ["Adi", "Kriti"],
             "details": ""
           },
           "2.2": {
             "title": "Elections",
+            "speaker": "Rohan",
+            "relevance": [ "Kriti"],
             "details": ""
           },
           "2.3": {
             "title": "Call with EWOR",
+            "speaker": "Rohan",
+            "relevance": ["Adi", "Kriti"],
             "details": ""
           }
         }
@@ -30,14 +38,18 @@
         "subsections": {
           "3.1": {
             "title": "Committee Work",
+            "speaker": "Adi",
+            "relevance": ["Oishi", "Diya"],
             "details": ""
           },
           "3.2": {
             "title": "Grants",
+            "speaker": "Adi",
             "details": ""
           },
           "3.3": {
             "title": "Resource Changes",
+            "speaker": "Adi",
             "details": ""
           }
         }
