@@ -9,6 +9,7 @@ import asyncio
 class TranscriptProcessor:
     def __init__(self, transcript_file_path: str = None):
         self.observers = []
+        self.meeting_end_handlers = []
         self.transcript = []
         self.start_time = None
         self.transcript_file_path = transcript_file_path
@@ -117,6 +118,26 @@ class TranscriptProcessor:
                 await asyncio.sleep(remaining_time)  # Use asyncio.sleep instead of time.sleep
             
             print(f"Time limit of {time_limit_seconds} seconds reached. Simulation complete.")
+        
+        print(f"Meeting simulation complete.")
+        await self._notify_meeting_end()
+    
+    # Calling an observer when the meeting ends
+    def register_meeting_end_handler(self, handler):
+        """Register a handler to be called when the meeting ends."""
+        self.meeting_end_handlers.append(handler)
+        
+    # Notify when meeting ends
+    async def _notify_meeting_end(self):
+        """Notify all registered handlers that the meeting has ended."""
+        results = []
+        for handler in self.meeting_end_handlers:
+            if asyncio.iscoroutinefunction(handler):
+                result = await handler()
+            else:
+                result = handler()
+            results.append(result)
+        return results
     
     async def add_transcript_line(self, line):
         """Add a new line to the transcript and notify observers."""
