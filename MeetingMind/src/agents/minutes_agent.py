@@ -78,16 +78,10 @@ class MinutesAgent:
         """Called when a new transcript line is added. Adds the line to the processing queue."""
         print(f"{self.name} received: {transcript_line['speaker']} said: {transcript_line['message']}")
         
-        # Add to basic history
-        if len(transcript_line['message']) > 50:
-            summary = f"Summary: {transcript_line['message'][:50]}..."
-        else:
-            summary = f"Short message: {transcript_line['message']}"
             
         self.minutes.append({
             "timestamp": transcript_line['timestamp'],
             "speaker": transcript_line['speaker'],
-            "summary": summary
         })
         
         # Add to the processing queue instead of processing immediately

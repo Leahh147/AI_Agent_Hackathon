@@ -3,8 +3,13 @@ from src.transcript.processor import TranscriptProcessor
 from src.agents.minutes_agent import MinutesAgent
 from src.agents.context_agent import ContextAgent
 import os
+from src.services.google_doc_service import generate_required_files
 
 async def main():
+    # Generate required structure files from google docs and save to local files
+    generated_files = generate_required_files()
+    print(f"Generated required files: {generated_files}")
+
     # Get the project root directory
     project_root = os.path.dirname(os.path.abspath(__file__))
     
