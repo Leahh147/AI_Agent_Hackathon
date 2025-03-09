@@ -220,7 +220,7 @@ class MinutesAgent:
         # Update the current timestamp
         self.current_timestamp = timestamp
 
-        next_index, next_name, next_speaker, next_relevance = self.get_next_section_subsection()
+        next_index, next_name, next_speaker, next_relevance = self.get_next_state()
 
         if next_index:
             print(f"The next section/subsection index is: {next_index}")
@@ -239,7 +239,7 @@ class MinutesAgent:
             print("No relevance found for the next section/subsection.")
 
         
-    def get_next_section_subsection(self):
+    def get_next_state(self):
         """Compute the next section/subsection index, name, speaker, and relevance."""
         
         # Ensure the current section and subsection are available
