@@ -5,7 +5,6 @@ import json
 import re
 import asyncio
 from copy import deepcopy
-import queue
 from typing import List, Dict, Any
 from src.services.google_doc_service import append_detail_to_doc
 
@@ -23,6 +22,8 @@ class MinutesAgent:
         self.transcript_queue = asyncio.Queue()  # Queue for transcript lines
         self.processing_task = None  # Task for processing the queue
         self.google_doc_id = google_doc_id
+        self.current_topic_start_timestamp = None  # Track the starting timestamp of the current topic
+        self.current_timestamp = None  # Track the current timestamp
         
         # Get the project root directory
         self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -99,13 +100,15 @@ class MinutesAgent:
             
             # Process the update and modify the minutes structure if needed
             if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
-                self.update_minutes_structure(update)
-                # Update Google Doc with the new detail
+
+                self.update_minutes_structure(update, transcript_line['timestamp'])
+                 # Update Google Doc with the new detail
                 self.update_google_doc(
                     update.get("section"), 
                     update.get("subsection"), 
                     update.get("details")
                 )
+
                 # Save the updated structure
                 self.save_minutes()
     
@@ -163,7 +166,7 @@ class MinutesAgent:
         else:
             return {"section": None, "details": None}
     
-    def update_minutes_structure(self, update):
+    def update_minutes_structure(self, update, timestamp):
         """Update the minutes structure with the new information."""
         section = update.get("section")
         subsection = update.get("subsection", None)
@@ -210,6 +213,13 @@ class MinutesAgent:
                     else:
                         subsection_data["details"] = [existing_details, details]
                 print(f"Added point to subsection {section}.{subsection}: {details[:30]}...")
+        
+        # Update the current topic start timestamp if starting a new section or subsection
+        if not self.current_topic_start_timestamp or section != self.current_topic_start_timestamp.get("section") or subsection != self.current_topic_start_timestamp.get("subsection"):
+            self.current_topic_start_timestamp = {"section": section, "subsection": subsection, "timestamp": timestamp}
+        
+        # Update the current timestamp
+        self.current_timestamp = timestamp
 
     def update_google_doc(self, section, subsection, details):
         """Update the Google Doc with a newly added detail."""
@@ -235,4 +245,19 @@ class MinutesAgent:
     
     def get_minutes(self):
         """Return the generated minutes."""
-        return self.minutes
+        return self.minutes_structure
+    
+    def get_current_topic_start_timestamp(self):
+        """Return the starting timestamp of the current topic."""
+        return self.current_topic_start_timestamp
+    
+    def get_minutes_within_timestamp(self, start_timestamp, end_timestamp):
+        """Return the minutes within the given timestamp range."""
+        return [
+            minute for minute in self.minutes
+            if start_timestamp <= minute['timestamp'] <= end_timestamp
+        ]
+    
+    def get_current_timestamp(self):
+        """Return the current timestamp."""
+        return self.current_timestamp
