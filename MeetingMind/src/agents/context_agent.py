@@ -23,7 +23,7 @@ class ContextAgent:
             completion = await self.client.chat.completions.create(
                 model="gpt-4",
                 messages=[
-                    {"role": "system", "content": "You are a helpful assistant."},
+                    {"role": "system", "content": "You are a meeting assistant to notify meeting attendee to pay attention when the current part involves or will involve them."},
                     {
                         "role": "user",
                         "content": f"Analyze the following script and answer if a person should be participating in the discussion based on the role description in the provided text. Respond with 'Yes' or 'No' only:\n\nRole Descriptions:\n{self.role_descriptions}\n\nScript:\n{lines}"
