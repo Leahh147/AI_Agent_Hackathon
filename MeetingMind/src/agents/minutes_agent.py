@@ -28,6 +28,9 @@ class MinutesAgent:
         # self.minutes_structure = None
 
         self.context_agent = context_agent
+
+        self.current_topic_start_timestamp = None  # Track the starting timestamp of the current topic
+        self.current_timestamp = None  # Track the current timestamp
         
         # Set paths for files
         self.sample_minute_path = os.path.join(
@@ -96,7 +99,7 @@ class MinutesAgent:
             # Process the update and modify the minutes structure if needed
             if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
 
-                self.update_minutes_structure(update)
+                self.update_minutes_structure(update, transcript_line['timestamp'])
                  # Update Google Doc with the new detail
                 self.update_google_doc(
                     update.get("section"), 
@@ -166,7 +169,7 @@ class MinutesAgent:
         else:
             return {"section": None, "details": None}
     
-    def update_minutes_structure(self, update):
+    def update_minutes_structure(self, update, timestamp):
         """Update the minutes structure with the new information."""
         section = update.get("section")
         subsection = update.get("subsection", None)
@@ -218,6 +221,13 @@ class MinutesAgent:
                         subsection_data["details"] = [existing_details, details]
                 print(f"Added point to subsection {section}.{subsection}: {details[:30]}...")
             self.current_scope = section_data["subsections"][subsection]
+
+        # Update the current topic start timestamp if starting a new section or subsection
+        if not self.current_topic_start_timestamp or section != self.current_topic_start_timestamp.get("section") or subsection != self.current_topic_start_timestamp.get("subsection"):
+            self.current_topic_start_timestamp = {"section": section, "subsection": subsection, "timestamp": timestamp}
+        
+        # Update the current timestamp
+        self.current_timestamp = timestamp
 
         self.update_state = True
 
@@ -325,5 +335,10 @@ class MinutesAgent:
     def get_current_topic(self):
         return self.current_scope
     
+    def get_current_topic_start_timestamp(self):
+         """Return the starting timestamp of the current topic."""
+         return self.current_topic_start_timestamp
+     
+
     # def context_agent_can_update(self):
     #     return self.prev_minutes_structure == self.minutes_structure

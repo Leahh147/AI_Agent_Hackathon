@@ -21,12 +21,14 @@
           },
           "2.2": {
             "title": "Elections",
-            
-            "relevance": [ "Oishi"],
+            "speaker": "Rohan",
+            "relevance": [ "Kriti"],
             "details": ""
           },
           "2.3": {
             "title": "Call with EWOR",
+            "speaker": "Rohan",
+            "relevance": ["Adi", "Kriti"],
             "details": ""
           }
         }
@@ -36,14 +38,18 @@
         "subsections": {
           "3.1": {
             "title": "Committee Work",
+            "speaker": "Adi",
+            "relevance": ["Oishi", "Diya"],
             "details": ""
           },
           "3.2": {
             "title": "Grants",
+            "speaker": "Adi",
             "details": ""
           },
           "3.3": {
             "title": "Resource Changes",
+            "speaker": "Adi",
             "details": ""
           }
         }
