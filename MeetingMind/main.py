@@ -21,7 +21,9 @@ async def main():
     # Create processor and agent
     processor = TranscriptProcessor(transcript_file_path=output_transcript_path)
     minutes_doc_id = '1W6BTAWwDpQL_X3dD02Z4j9AbHHTDSek0iOWc0f6MkDM'  # minutes template doc ID
-    minutes_agent = MinutesAgent(google_doc_id = minutes_doc_id)
+    discord_token = "MTM0Nzk5NTI2OTgzNjMwODUwMQ.Gjr8ag.E660ddgmZ2vVT4ILbq1X30MR9gBqxF3oy9sZrY"
+    CHANNEL_ID = 1347996655013597227
+    minutes_agent = MinutesAgent(google_doc_id = minutes_doc_id, discord_token = discord_token, discord_channel_id=CHANNEL_ID)
     context_agent = ContextAgent(minutes_agent = minutes_agent)
     action_agent = ActionAgent()
     

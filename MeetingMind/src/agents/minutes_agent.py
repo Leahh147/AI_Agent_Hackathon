@@ -7,6 +7,7 @@ import asyncio
 from copy import deepcopy
 from typing import List, Dict, Any
 from src.services.google_doc_service import append_detail_to_doc
+from src.services.discord_service import DiscordNotifier
 
 # Load the .env file
 load_dotenv()
@@ -15,7 +16,7 @@ load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
 class MinutesAgent:
-    def __init__(self, name="MinutesAgent", google_doc_id = None):
+    def __init__(self, name="MinutesAgent", google_doc_id = None, discord_token=None, discord_channel_id=None):
         self.name = name
         self.minutes = []
         self.processing_lock = asyncio.Lock()  # Lock for synchronizing updates
@@ -41,6 +42,16 @@ class MinutesAgent:
         
         # Start the background processing task
         self.start_processing()
+
+        # Initialize Discord notifier if token is provided
+        self.discord_token = discord_token
+        self.discord_channel_id = discord_channel_id
+        self.discord_notifier = None
+
+        if discord_token:
+            self.discord_notifier = DiscordNotifier(discord_token, discord_channel_id)
+            # Start the Discord notifier in a separate thread
+            self._start_discord_notifier()
     
     def load_minutes_structure(self):
         """Load the initial minutes structure from the sample file."""
@@ -225,6 +236,7 @@ class MinutesAgent:
         if next_index:
             print(f"The next section/subsection index is: {next_index}")
             print(f"The next section/subsection name is: {next_name}")
+            self.send_upcoming_section_notifications(next_index, next_name, next_speaker, next_relevance)
         else:
             print("No next section/subsection found.")
 
@@ -335,3 +347,67 @@ class MinutesAgent:
     def get_current_timestamp(self):
         """Return the current timestamp."""
         return self.current_timestamp
+    
+    def send_upcoming_section_notifications(self, next_index, next_name, next_speaker, next_relevance):
+        """Send Discord notifications to upcoming speakers and relevant participants."""
+        try:
+            # Skip if Discord notifier isn't initialized
+            if not hasattr(self, 'discord_notifier') or not self.discord_notifier:
+                print("Discord notifier not initialized, skipping notifications.")
+                return
+                
+            # Dictionary mapping speakers/participants to their Discord user IDs
+            # This should be configured with actual user IDs for your team
+            user_id_mapping = {
+                # Speakers and participants with their Discord user IDs
+                "Adi": 1346615174169231425,
+                "Oishi": 401599932932292608,
+                "Harsh": 401599932932292608,
+                "Diya": 1160641318347882506,
+                "Rohan": 731882462313185350,
+            }
+            
+            # Notify the next speaker
+            if next_speaker and next_speaker in user_id_mapping:
+                speaker_id = user_id_mapping[next_speaker]
+                speaker_message = (
+                    f"🔔 **Upcoming Agenda Item Alert!** 🔔\n\n"
+                    f"📝 **Item {next_index}:** {next_name}\n\n"
+                    f"You're the designated speaker for this section. It's about time for you to speak!"
+                )
+                
+                # Send message to next speaker
+                asyncio.run_coroutine_threadsafe(
+                    self.discord_notifier.send_dm_participate(speaker_id, speaker_message),
+                    self.discord_notifier.loop
+                )
+                print(f"Sent upcoming speaker notification to {next_speaker}")
+            
+            # Notify relevant participants
+            if next_relevance:
+                for person in next_relevance:
+                    if person in user_id_mapping:
+                        person_id = user_id_mapping[person]
+                        person_message = (
+                            f"🔔 **Upcoming Agenda Item Alert!** 🔔\n\n"
+                            f"📝 **Item {next_index}:** {next_name}\n\n"
+                                                        f"This section is relevant to you. It's about time for you to participate!"
+                        )
+                        
+                        # Send message to relevant participant
+                        asyncio.run_coroutine_threadsafe(
+                            self.discord_notifier.send_dm(person_id, person_message),
+                            self.discord_notifier.loop
+                        )
+                        print(f"Sent relevance notification to {person}")
+            
+        except Exception as e:
+            print(f"Error sending Discord notifications: {e}")
+
+    def _start_discord_notifier(self):
+        """Start the Discord notifier in a separate thread."""
+        if self.discord_notifier:
+            import threading
+            notifier_thread = threading.Thread(target=self.discord_notifier.run, daemon=True)
+            notifier_thread.start()
+            print("[MinutesAgent] Discord notifier thread started.")
