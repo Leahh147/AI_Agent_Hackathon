@@ -26,6 +26,10 @@ class KeywordMonitor:
         """
         Called when a new transcript line is added.
         """
+        if not self.active:
+            print("[KeywordMonitor] Monitor is inactive. Skipping line.")
+            return  # Stop processing if listening is OFF
+
         print(
             f"[KeywordMonitor] Received line from {transcript_line['speaker']}: {transcript_line['message']}"
         )
@@ -179,7 +183,7 @@ class DiscordMonitor:
             "[DiscordMonitor] Notifier thread started. Waiting for Discord client to connect..."
         )
         # Allow time for the Discord client to connect.
-        time.sleep(40)
+        time.sleep(30)
         print(
             "[DiscordMonitor] Scheduling transcript queue processing in the event loop..."
         )
