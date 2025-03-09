@@ -6,14 +6,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 from googleapiclient.discovery import build
 import pickle
-import re
 
 # Define the scopes
-SCOPES = ['https://www.googleapis.com/auth/documents']
-    
-# Google Doc IDs
-minutes_doc_id = '1W6BTAWwDpQL_X3dD02Z4j9AbHHTDSek0iOWc0f6MkDM'  # minutes template doc ID
-roles_doc_id = '1Zibfc1Q8uLayySoMTbW6sZS1RhVEV6giWVShoZ450pU'  # roles doc ID
+SCOPES = ['https://www.googleapis.com/auth/documents.readonly']
 
 def get_google_credentials():
     """Get or refresh credentials for Google API access."""
@@ -191,7 +186,7 @@ def generate_roles_data(doc_id, output_path=None):
     
     return roles_data
 
-def generate_minutes_structure(doc_id=minutes_doc_id, output_path=None):
+def generate_minutes_structure(doc_id='1W6BTAWwDpQL_X3dD02Z4j9AbHHTDSek0iOWc0f6MkDM', output_path=None):
     """Generate meeting minutes structure from Google Doc and save to file."""
     # Get document content
     content = get_document_content(doc_id)
@@ -217,6 +212,10 @@ def generate_required_files():
     """Generate all required structure files."""
     project_root = get_project_root()
     
+    # Google Doc IDs
+    minutes_doc_id = '1W6BTAWwDpQL_X3dD02Z4j9AbHHTDSek0iOWc0f6MkDM'  # minutes template doc ID
+    roles_doc_id = '1Zibfc1Q8uLayySoMTbW6sZS1RhVEV6giWVShoZ450pU'  # roles doc ID
+    
     # Output paths
     minutes_path = os.path.join(
         project_root, "tests", "sample_data", "sample_minute_structure_generated.json"
@@ -235,87 +234,6 @@ def generate_required_files():
         "minutes_path": minutes_path,
         "roles_path": roles_path
     }
-
-def append_detail_to_doc(doc_id, section_id, detail):
-    """Append a detail to a specific section or subsection in the Google Doc.
-    
-    Args:
-        doc_id: The Google Doc ID
-        section_id: The section identifier (e.g., "2.1")
-        detail: The detail text to add
-    """
-    creds = get_google_credentials()
-    service = build('docs', 'v1', credentials=creds)
-    
-    # Get the document
-    document = service.documents().get(documentId=doc_id).execute()
-    
-    # Define the pattern to search for based on section_id
-    if '.' in section_id and not section_id.endswith('.'):
-        # It's a subsection like "2.1"
-        pattern = f"#### {section_id} "
-    else:
-        # It's a main section like "2." (strip the dot for matching)
-        section_num = section_id.rstrip('.')
-        pattern = f"### **{section_num}. "
-    
-    # Find the heading in the document
-    content = document.get('body').get('content')
-    found_section = False
-    insert_position = None
-    
-    for i, element in enumerate(content):
-        if not found_section and 'paragraph' in element:
-            paragraph_text = ""
-            
-            for text_run in element['paragraph']['elements']:
-                if 'textRun' in text_run:
-                    paragraph_text += text_run['textRun']['content']
-            
-            if paragraph_text.startswith(pattern):
-                # Found our section heading
-                found_section = True
-                # Start with the position right after this paragraph
-                insert_position = element.get('endIndex', None)
-                continue
-        
-        if found_section and 'paragraph' in element:
-            paragraph_text = ""
-            
-            for text_run in element['paragraph']['elements']:
-                if 'textRun' in text_run:
-                    paragraph_text += text_run['textRun']['content']
-            
-            # If we find a new section or subsection heading, stop looking
-            if (paragraph_text.startswith("### **") or 
-                paragraph_text.startswith("#### ")):
-                break
-            
-            # If we're still in bullet points, update our insert position
-            # to the end of this paragraph
-            if paragraph_text.strip().startswith("- "):
-                insert_position = element.get('endIndex', None)
-                continue
-    
-    if insert_position:
-        # Insert the bullet point at the position we found
-        requests = [{
-            'insertText': {
-                'location': {'index': insert_position},
-                'text': f"- {detail}\n"
-            }
-        }]
-        
-        service.documents().batchUpdate(
-            documentId=doc_id,
-            body={'requests': requests}
-        ).execute()
-        
-        print(f"Added bullet point to {section_id}")
-        return True
-    else:
-        print(f"Could not find section {section_id}")
-        return False
 
 if __name__ == "__main__":
     generate_required_files()
