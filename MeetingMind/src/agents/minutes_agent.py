@@ -79,7 +79,6 @@ class MinutesAgent:
     async def update(self, transcript_line):
         """Called when a new transcript line is added. Adds the line to the processing queue."""
         print(f"{self.name} received: {transcript_line['speaker']} said: {transcript_line['message']}")
-        
             
         self.minutes.append({
             "timestamp": transcript_line['timestamp'],

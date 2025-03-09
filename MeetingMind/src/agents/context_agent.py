@@ -14,7 +14,13 @@ class ContextAgent:
         self.role_descriptions = self.load_role_descriptions()
 
     def load_role_descriptions(self):
-        with open('config/role_descriptions.json', 'r') as file:
+        # Get the project root directory
+        self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+        # Set paths for files
+        self.role_description_path = os.path.join(
+            self.project_root, "config", "role_description.json"
+        )
+        with open(self.role_description_path, 'r') as file:
             role_descriptions = json.load(file)
         return role_descriptions
 
