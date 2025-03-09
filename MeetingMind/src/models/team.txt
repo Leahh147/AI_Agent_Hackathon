@@ -1,0 +1,53 @@
+Team Structure:
+---- Execs (President, Vice-President, Treasurer, Sponsorship Executive)
+|---- Directors (Events, Marketing and Communications / MnC, Opportunities, Technology)
+
+
+Sponsorship (Edward)
+The aim of the Industry Executive is to establish new links with companies that result in mutually beneficial arrangements for CUES members and the company involved.
+The Industry Executive is in charge of running CUES sector events and presentations and communicating with the Events Team about companies attending the Careers Fair.
+Closely linked to the financial success of the society, the Industry Executive also represents the interests of the sponsors at internal meetings.
+
+President (Rohan)
+The President is a public facing role, representing all the members of the society.
+The President is in-charge of managing non-sponsor external relations with:
+university bodies e.g. Engineering Department (including CLIC and Library), Careers Service;
+academic societies e.g. IET, IMechE, RAeS;
+student societies within Cambridge e.g. CUER, CUR, CUCATS, CUCES, CUPS, FBR;
+societies outside Cambridge e.g. OxEngSoc, Imperial MechSoc.
+The President sets the vision for the society and the direction of the committee.
+The President is always on a look-out for initiatives and opportunities for collaboration that align with the society mission.
+The President is responsible for the overall performance and image of the society.
+
+MnC Director (Leah)
+The Marketing Director has a very organisational based role, requiring decent understanding of a range of marketing areas including design, brand management and marketing strategy.
+The role involves organising the marketing and communications team, making sure they’re on track with their tasks, enjoying their time, and communicating with the entire committee in relation to the marketing area.
+Responsibilities are to ensure that all marketing is put out on time and to a decent quality, the brand being maintained and we have good event attendance.
+
+Events Director (Oishi, Diya)
+The Event Director decides on events to take place, and coordinates a team of officers to make sure they are ran successfully.
+Coordination with publicity and sponsorship mostly to run big events like Career’s Fair and Annual Dinner.
+The role ensures that the events are executed successfully through the collaboration of the team members.
+
+Treasurer (Connie)
+The Treasurer is responsible for having a full understanding of the society’s financial situation.
+This includes invoice issuance and tracking for sponsorship.
+The role manages internal spending and compensation.
+The Treasurer is required to regularly update the society budget sheet to reflect spending and earning.
+The Treasurer has to also make sure that an updated copy of CUES committee members, changes to the constitution and an annual breakdown of the accounts is sent to the Proctors Office, co-ordinated with the Senior Treasurer.
+
+Opportunities Director (Kriti)
+Managing the student outreach of the society and facilitating the roles which liaise with the department on behalf of the society members.
+A liaison role between the student body and the senior staff of the CUED, with a seat on the Staff-Student Joint Committee (SSJC) to identify student needs and areas of improvement.
+The role has great scope for introducing new initiatives in collaboration with team members.
+
+Vice President (Adi)
+The Vice President is responsible for the internal management of the society.
+The role assesses the structure and systems of the committee, streamlining the working processes.
+The role also manages the grants schemes run by the society.
+The role is also responsible for keeping up to date with the actions and attitudes of the committee members.
+
+Technology Director (Harsh)
+Leads the Technology team within CUES, managing the website, database, servers, membership, and other core technology challenges the society faces.
+Works with the Events team and company partners to organise and publicise events such as the CUES Hackathons.
+Works with other teams to support them with customised solutions including mail delivery, domain name usage and other technology related queries.

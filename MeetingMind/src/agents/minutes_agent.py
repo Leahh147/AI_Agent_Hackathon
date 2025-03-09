@@ -5,8 +5,8 @@ import json
 import re
 import asyncio
 from copy import deepcopy
-import queue
 from typing import List, Dict, Any
+from src.services.google_doc_service import append_detail_to_doc
 
 # Load the .env file
 load_dotenv()
@@ -15,12 +15,15 @@ load_dotenv()
 openai.api_key = os.getenv("API_KEY")
 
 class MinutesAgent:
-    def __init__(self, name="MinutesAgent"):
+    def __init__(self, name="MinutesAgent", google_doc_id = None):
         self.name = name
         self.minutes = []
         self.processing_lock = asyncio.Lock()  # Lock for synchronizing updates
         self.transcript_queue = asyncio.Queue()  # Queue for transcript lines
         self.processing_task = None  # Task for processing the queue
+        self.google_doc_id = google_doc_id
+        self.current_topic_start_timestamp = None  # Track the starting timestamp of the current topic
+        self.current_timestamp = None  # Track the current timestamp
         
         # Get the project root directory
         self.project_root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -76,17 +79,10 @@ class MinutesAgent:
     async def update(self, transcript_line):
         """Called when a new transcript line is added. Adds the line to the processing queue."""
         print(f"{self.name} received: {transcript_line['speaker']} said: {transcript_line['message']}")
-        
-        # Add to basic history
-        if len(transcript_line['message']) > 50:
-            summary = f"Summary: {transcript_line['message'][:50]}..."
-        else:
-            summary = f"Short message: {transcript_line['message']}"
             
         self.minutes.append({
             "timestamp": transcript_line['timestamp'],
             "speaker": transcript_line['speaker'],
-            "summary": summary
         })
         
         # Add to the processing queue instead of processing immediately
@@ -103,7 +99,15 @@ class MinutesAgent:
             
             # Process the update and modify the minutes structure if needed
             if update and isinstance(update, dict) and update.get("section") is not None and update.get("details"):
-                self.update_minutes_structure(update)
+
+                self.update_minutes_structure(update, transcript_line['timestamp'])
+                 # Update Google Doc with the new detail
+                self.update_google_doc(
+                    update.get("section"), 
+                    update.get("subsection"), 
+                    update.get("details")
+                )
+
                 # Save the updated structure
                 self.save_minutes()
     
@@ -161,7 +165,7 @@ class MinutesAgent:
         else:
             return {"section": None, "details": None}
     
-    def update_minutes_structure(self, update):
+    def update_minutes_structure(self, update, timestamp):
         """Update the minutes structure with the new information."""
         section = update.get("section")
         subsection = update.get("subsection", None)
@@ -208,15 +212,126 @@ class MinutesAgent:
                     else:
                         subsection_data["details"] = [existing_details, details]
                 print(f"Added point to subsection {section}.{subsection}: {details[:30]}...")
+        
+        # Update the current topic start timestamp if starting a new section or subsection
+        if not self.current_topic_start_timestamp or section != self.current_topic_start_timestamp.get("section") or subsection != self.current_topic_start_timestamp.get("subsection"):
+            self.current_topic_start_timestamp = {"section": section, "subsection": subsection, "timestamp": timestamp}
+        
+        # Update the current timestamp
+        self.current_timestamp = timestamp
+
+        next_index, next_name, next_speaker, next_relevance = self.get_next_state()
+
+        if next_index:
+            print(f"The next section/subsection index is: {next_index}")
+            print(f"The next section/subsection name is: {next_name}")
+        else:
+            print("No next section/subsection found.")
+
+        if next_speaker:
+            print(f"The speaker for the next section/subsection is: {next_speaker}")
+        else:
+            print("No speaker found for the next section/subsection.")
+
+        if next_relevance:
+            print(f"The relevance for the next section/subsection is: {next_relevance}")
+        else:
+            print("No relevance found for the next section/subsection.")
+
+        
+    def get_next_state(self):
+        """Compute the next section/subsection index, name, speaker, and relevance."""
+        
+        # Ensure the current section and subsection are available
+        if not self.current_topic_start_timestamp:
+            print("No current topic timestamp available.")
+            return None, None, None, None, None  # Return None for index, name, speaker, and relevance
+        
+        current_section = self.current_topic_start_timestamp.get("section")
+        current_subsection = self.current_topic_start_timestamp.get("subsection")
+        
+        # Ensure 'agenda' exists in the minutes structure
+        if "agenda" not in self.minutes_structure:
+            print("No agenda structure found.")
+            return None, None, None, None, None  # Return None if no agenda structure
+        
+        # Get the agenda and prepare a list for sorting
+        agenda = self.minutes_structure["agenda"]
+        combined_items = []
+
+        # Populate the list with sections and/or subsections
+        for section_key, section in agenda.items():
+            if "subsections" in section and section["subsections"]:
+                # If the section has subsections, include only the subsections
+                for subsection_key, subsection in section["subsections"].items():
+                    combined_items.append((int(section_key), float(subsection_key), subsection, subsection_key))  
+                    # (Section Int, Subsection Float, Subsection Data, Subsection Index)
+            else:
+                # If the section has no subsections, include the section itself
+                combined_items.append((int(section_key), None, section, None))  
+                # (Section Int, None, Section Data, None)
+
+        # Sort the list: First by section, then by subsection (placing main sections before subsections)
+        combined_items = sorted(combined_items, key=lambda x: (x[0], x[1] if x[1] is not None else 0))
+
+        # Flag to indicate if we found the current section/subsection
+        found_current = False
+
+        # Iterate over the sorted items
+        for section_key, subsection_key, item_data, subsection_index in combined_items:
+            # If we have already found the current section/subsection, return the next one
+            if found_current:
+                next_index = f"{section_key}.{subsection_index}" if subsection_index is not None else str(section_key)
+                next_name = item_data.get("title")  # Fetch section or subsection name
+                next_speaker = item_data.get("speaker")
+                next_relevance = item_data.get("relevance", [])
+                return next_index, next_name, next_speaker, next_relevance
+            
+            # Check if this section/subsection matches the current one
+            if str(section_key) == current_section and (str(subsection_key) == current_subsection or current_subsection is None):
+                found_current = True
+
+        print("No next section or subsection found.")
+        return None, None, None, None, None  # Return None if no next section/subsection found
+
+
+    def update_google_doc(self, section, subsection, details):
+        """Update the Google Doc with a newly added detail."""
+        if not hasattr(self, 'google_doc_id') or not self.google_doc_id:
+            return
+        
+        # Determine the section identifier
+        section_id = f"{section}." if not subsection else subsection
+        
+        try:
+            append_detail_to_doc(self.google_doc_id, section_id, details)
+        except Exception as e:
+            print(f"Error updating Google Doc: {e}")
     
     def save_minutes(self):
         """Save the current minutes structure to a file."""
         try:
             with open(self.output_path, 'w') as f:
                 json.dump(self.minutes_structure, f, indent=2)
+
         except Exception as e:
             print(f"Error saving minutes: {e}")
     
     def get_minutes(self):
         """Return the generated minutes."""
-        return self.minutes
+        return self.minutes_structure
+    
+    def get_current_topic_start_timestamp(self):
+        """Return the starting timestamp of the current topic."""
+        return self.current_topic_start_timestamp
+    
+    def get_minutes_within_timestamp(self, start_timestamp, end_timestamp):
+        """Return the minutes within the given timestamp range."""
+        return [
+            minute for minute in self.minutes
+            if start_timestamp <= minute['timestamp'] <= end_timestamp
+        ]
+    
+    def get_current_timestamp(self):
+        """Return the current timestamp."""
+        return self.current_timestamp
